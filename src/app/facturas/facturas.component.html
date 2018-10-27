@@ -1,0 +1,229 @@
+<!-- ------ MODAL PARA MOSTRAR LOS VENTAS DEL DIA -------- -->
+<div bsModal #facturasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+[config]="{backdrop: 'static'}">
+<div class="modal-dialog modal-lg modal-primary" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+        <div class="input-group">
+          <span class="input-group-addon" for="busqueda">Buscar por:</span>
+          <select id="busqueda" name="busqueda" class="form-control" [(ngModel)]="buscarPor">
+            <option value="numFactura">Numero factura</option>
+            <option value="cliente">Cliente</option>
+            <option value="fecha">Fecha</option>
+          </select>          
+        </div>
+        <!-- busqueda para una factura con su numero-->
+        <input type="number" class="form-control" [(ngModel)]="numFactura" *ngIf="verFactura()" (keypress)="eventCargarInfo(numFactura, $event)">
+        <button type="button" class="btn btn-success" (click)="cargarInfo(numFactura)" *ngIf="verFactura()">Buscar</button>
+        <!-- busqueda de varias facturas por cliente-->
+        <input type="text" class="form-control" [(ngModel)]="dato" *ngIf="buscarPor == 'cliente'" (ngModelChange)="buscarFacturas()">
+        <!-- busqueda de varias facturas por fecha-->
+        <input type="text" class="form-control" [bsConfig]="bsConfig" placeholder="fecha" *ngIf="buscarPor == 'fecha'" bsDaterangepicker [(ngModel)]="fechaD" />
+        <button type="button" class="btn btn-success" (click)="buscarFacturas()" *ngIf="buscarPor == 'fecha'">Buscar</button>     
+    </div>
+    <!-- Aqui empieza el cuerpo-->
+    <div class="modal-body">
+      <!-- busca varias facturas-->
+      <div class="row" *ngIf="!verFactura()">
+        <lista-factura #listaFacturas [dato]="dato" [buscarPor]="buscarPor" [padre]="this" class="col-12"></lista-factura>
+      </div>
+      <!-- busca una sola factura por su numero-->
+     <div class="row" *ngIf="verFactura()">
+       <!-- CONTENEDOR PARA LOS PRODUCTOS DE LA FACTURA-->
+       <div class="col-md-6 col-xs-6 col-sm-6 bg-primary">
+         <div id="cabeceraFactura" class="centerTable">
+           <h2>Mesa: {{mesa}}</h2>
+           <table>
+             <tr>
+               <td >Descuento: </td>
+               <td>&nbsp;${{descuentoG | number:0}}</td> 
+             </tr>
+             <tr>
+               <td>Propina: </td>
+               <td *ngIf="!editar">&nbsp;${{propina | number:0}}</td>
+               <td *ngIf="editar"> <input type="number" [(ngModel)]="propina"> </td>
+             </tr>
+             <tr>
+               <td>SubTotal: </td><td>&nbsp;${{subTotal | number:0}}</td>
+             </tr>
+           </table>
+           <br>
+           <h2>${{total | number:0}}</h2>
+           {{fecha}}
+         </div>
+         <hr>
+         <div id="cuerpoFactura" class="scrollTabla">
+           <table style="text-align: center;">
+             <thead>
+             <th>Cant. </th>
+             <th>Producto </th>
+             <th>% Desc.</th>
+             <th>Valor </th>
+             <th>Tr</th>
+             </thead>
+             <tbody>
+               <tr *ngFor="let prod of productos">
+                 <td>{{prod.cantidad}}</td>
+                 <td  style="text-align: left;">{{prod.nombreP}}</td>
+                 <td>{{prod.descuentoP}}</td>
+                 <td>${{prod.precioP | number:0}}</td>
+                 <td>&nbsp;{{prod.tr}}</td>
+               </tr>
+             </tbody>
+           </table>
+         </div>
+       </div>
+       <!-- CONTENEDOR PARA LA INFO BASICA DE LA FACTURA-->
+       <div class="col-md-6 col-xs-6 col-sm-6">
+        <div class="row container" id="botones">
+          <button type="button" class="btn btn-primary" (click)="eventEditar()">Editar</button>
+          <button type="button" class="btn btn-primary" (click)="imprimir()">Imprimir</button>
+          <button type="button" class="btn btn-primary" (click)="eventGuardar()">Guardar</button>
+        </div>
+        <div id="inputs">
+          <!-- PUEDE EDITAR LA TABLA-->
+          <table *ngIf="editar">
+            <tr>
+              <td>Cajero: </td>
+              <td><input type="text" class="form-control" [(ngModel)]="cajero" disabled></td>
+            </tr>
+            <tr>
+              <td>Nombre: </td>
+              <td><input type="text" class="form-control" [(ngModel)]="nombreC"></td>
+            </tr>
+            <tr>
+              <td>Direccion: </td>
+              <td><input type="text" class="form-control" [(ngModel)]="direccionC"></td>
+            </tr>
+            <tr>
+              <td>Telefono:</td>
+              <td><input type="text" class="form-control" [(ngModel)]="telefonoC"></td>
+            </tr>
+            <tr>
+              <td>Empresa: </td>
+              <td><input type="text" class="form-control" [(ngModel)]="empresaC"></td>
+            </tr>
+          </table>
+          <!-- NO PUEDE EDITAR LA TABLA-->
+          <table *ngIf="!editar">
+            <tr>
+              <td>Cajero: </td>
+              <td><input type="text" class="form-control" [(ngModel)]="cajero" disabled></td>
+            </tr>
+            <tr>
+              <td>Nombre: </td>
+              <td>{{nombreC}}</td>
+            </tr>
+            <tr>
+              <td>Direccion: </td>
+              <td>{{direccionC}}</td>
+            </tr>
+            <tr>
+              <td>Telefono:</td>
+              <td>{{telefonoC}}</td>
+            </tr>
+            <tr>
+              <td>Empresa: </td>
+              <td>{{empresaC}}</td>
+            </tr>
+          </table>  <br> 
+          <div class="card border-primary">
+            <!-- PUEDE EDITAR-->
+            <div class="card-body" *ngIf="editar">
+                <label for="metodoP"><h5>Metodo de pago: </h5></label>
+                <input type="text" id="metodoP" name="metodoP" [(ngModel)]="metodoP"
+                (keypress)="eventMetodoP($event, metodoP)" [typeahead]="metodos_nombres" (click)="fm=true">
+                <br>
+                <!-- INPUT PARA EFECTIVO-->
+                <div *ngFor="let metodo of metodos_pagos">
+                <div class="form-group row"  *ngIf="metodoP.toUpperCase() == metodo.metodoP.toUpperCase()">
+                     <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" *ngIf="!mixto(metodo.metodoP)"><h6>Entrega</h6></span>
+                            <!-- efectivo-->
+                            <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP"
+                            class="form-control" *ngIf="efectivo(metodo.metodoP)" [(ngModel)]="valor1" (ngModelChange)="formato()">
+                            <!-- credito-->
+                            <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" 
+                            class="form-control" *ngIf="credito(metodo.metodoP)" [(ngModel)]="valor1" readonly="readonly">
+                            <!-- tarjeta-->
+                            <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" 
+                            class="form-control" *ngIf="tarjeta(metodo.metodoP)" [(ngModel)]="valor1" readonly="readonly">
+                            <!-- Input adicional en caso de ser mixto-->
+                            <span class="input-group-addon" *ngIf="mixto(metodo.metodoP)"><h6>Tarjeta</h6></span>
+                                <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" class="form-control" 
+                                (keypress)="eventMixto($event)"  *ngIf="mixto(metodo.metodoP)" [(ngModel)]="valor2">
+                        </div>
+                      </div> 
+                </div>
+                    <!-- INPUT ADICIONAL PARA UN PAGO MIXTO-->
+                <div class="form-group row"  *ngIf="(metodoP.toUpperCase() == metodo.metodoP.toUpperCase()) && mixto(metodo.metodoP)">
+                     <div class="col-md-12">
+                        <div class="input-group">
+                          <span class="input-group-addon"><h6>Efectivo</h6></span>
+                          <input type="number" id="efectivoMixto"  [name]="metodo.metodoP"
+                          class="form-control" [(ngModel)]="valor1">
+                        </div>
+                      </div> 
+                </div>
+                </div>
+            </div>
+            <!-- NO PUEDE EDITAR-->
+            <div class="card-body" *ngIf="!editar">
+                <label for="metodoP"><h5>Metodo de pago: </h5></label>
+                <input type="text" id="metodoP" name="metodoP" [(ngModel)]="metodoP"
+                (keypress)="eventMetodoP($event, metodoP)" [typeahead]="metodos_nombres" (click)="fm=true" disabled>
+                <br>
+                <!-- INPUT PARA EFECTIVO-->
+                <div *ngFor="let metodo of metodos_pagos">
+                <div class="form-group row"  *ngIf="metodoP.toUpperCase() == metodo.metodoP.toUpperCase()">
+                     <div class="col-md-12">
+                        <div class="input-group">
+                            <span class="input-group-addon" *ngIf="!mixto(metodo.metodoP)"><h6>Entrega</h6></span>
+                            <!-- efectivo-->
+                            <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP"
+                            class="form-control" *ngIf="efectivo(metodo.metodoP)" [(ngModel)]="valor1" (ngModelChange)="formato()" disabled>
+                            <!-- credito-->
+                            <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" 
+                            class="form-control" *ngIf="credito(metodo.metodoP)" [(ngModel)]="valor1" readonly="readonly" disabled>
+                            <!-- tarjeta-->
+                            <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" 
+                            class="form-control" *ngIf="tarjeta(metodo.metodoP)" [(ngModel)]="valor1" readonly="readonly" disabled>
+                            <!-- Input adicional en caso de ser mixto-->
+                            <span class="input-group-addon" *ngIf="mixto(metodo.metodoP)"><h6>Tarjeta</h6></span>
+                                <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" class="form-control" 
+                                (keypress)="eventMixto($event)"  *ngIf="mixto(metodo.metodoP)" [(ngModel)]="valor2" disabled>
+                        </div>
+                      </div> 
+                </div>
+                    <!-- INPUT ADICIONAL PARA UN PAGO MIXTO-->
+                <div class="form-group row"  *ngIf="(metodoP.toUpperCase() == metodo.metodoP.toUpperCase()) && mixto(metodo.metodoP)">
+                     <div class="col-md-12">
+                        <div class="input-group">
+                          <span class="input-group-addon"><h6>Efectivo</h6></span>
+                          <input type="number" id="efectivoMixto"  [name]="metodo.metodoP"
+                          class="form-control" [(ngModel)]="valor1" disabled>
+                        </div>
+                      </div> 
+                </div>
+                </div>
+            </div>
+          </div>
+          <h4>Devuelta: ${{calcularDevuelta() | number:0}}</h4>
+          <alert type="danger" *ngIf="verAlerta">
+            <strong>{{mensajeAlerta}}</strong>
+          </alert>
+        </div>
+       </div>
+     </div>
+    </div>
+    <!--Aqui termina el cuerpo -->
+    <div class="modal-footer">
+      <button type="button" style="cursor: pointer" class="btn btn-success" (click)="hideModal()">Cerrar</button>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

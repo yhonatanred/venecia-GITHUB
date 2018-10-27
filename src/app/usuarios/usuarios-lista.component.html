@@ -1,0 +1,244 @@
+<div *ngIf="!usuarios">
+  Cargando listado de usuarios...
+</div>
+
+<div class="row" *ngIf="usuarios">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="container">
+          <h3>
+            <i class="fa fa-align-justify"></i> Usuarios</h3>
+        </div>
+        <div class="container">
+          <div style="float:left;">
+            Filtrar por Nombre
+            <div class="input-group">
+              <span class="input-group-addon">
+                <i class="fa fa-search"></i>
+              </span>
+              <input [(ngModel)]="filterQuery" type="text" class="form-control" placeholder="nombre">
+            </div>
+          </div>
+          <div style="float:right;">
+            <br>
+            <usuarios-nuevo></usuarios-nuevo>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+          <table class="table table-striped" [mfData]="usuarios | usuarioFiltroNombre : filterQuery" #mf="mfDataTable" [mfRowsOnPage]="rowsOnPage"
+            [(mfSortBy)]="sortBy" [(mfSortOrder)]="sortOrder">
+            <thead>
+              <tr>
+                <th>
+                  <mfDefaultSorter by="nombre">Nombre</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="user">Usuario</mfDefaultSorter>
+                </th>
+                <th>
+                  <mfDefaultSorter by="rol">Rol</mfDefaultSorter>
+                </th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of mf.data">
+                <td>{{usuario.nombre}}</td>
+                <td>{{usuario.user}}</td>
+                <td>{{usuario.rol}}</td>
+                <td>
+                  <button type="button" class="btn btn-primary" (click)="usuariosDetalles(usuario, modalVerEditar)">
+                    <i class="fa fa-eye"></i>&nbsp; ver </button>
+                </td>
+                <td>
+                  <button type="button" class="btn btn-warning" (click)="usuariosEditar(usuario, modalVerEditar)">
+                    <i class="fa fa-edit"></i>&nbsp; modificar</button>
+                </td>
+                <td *ngIf="user.user == usuario.user">
+                  <button disabled type="button" class="btn btn-danger" (click)="confirmaEliminar(usuario.idUsuario, modalEliminar)">
+                    <i class="fa fa-eraser"></i>&nbsp; eliminar</button>
+                </td>
+                <td *ngIf="user.user != usuario.user">
+                  <button type="button" class="btn btn-danger" (click)="confirmaEliminar(usuario.idUsuario, modalEliminar)">
+                    <i class="fa fa-eraser"></i>&nbsp; eliminar</button>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="6">
+                  <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]"></mfBootstrapPaginator>
+                </td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+
+
+
+  <div bsModal #modalVerEditar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-primary" role="document" *ngIf="opcion=='ver'">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{titulo}}</h4>
+          <button type="button" class="close" (click)="cancelar(modalVerEditar)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Nombre</span>
+              <input type="text" id="nombre" name="nombre" class="form-control" disabled [(ngModel)]="usuarioVerEditar.nombre">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Apellido</span>
+              <input type="text" id="apellido" name="apellido" class="form-control" disabled [(ngModel)]="usuarioVerEditar.apellido">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Usuario</span>
+              <input type="text" id="user" name="user" class="form-control" disabled [(ngModel)]="usuarioVerEditar.user">
+              <span class="input-group-addon">
+                <i class="fa fa-user"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Contrasena</span>
+              <input type="password" id="pass" name="pass" class="form-control" disabled [(ngModel)]="usuarioVerEditar.pass">
+              <span class="input-group-addon">
+                <i class="fa fa-key"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon" for="rol">Rol</span>
+              <input type="rol" id="rol" name="rol" class="form-control" disabled [(ngModel)]="usuarioVerEditar.rol">
+              <span class="input-group-addon">
+                <i class="fa fa-key"></i>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-warning" (click)="usuariosEditar(usuarioVerEditar, modalVerEditar)">{{nombreBoton}}</button>
+          <button type="button" class="btn btn-primary" (click)="cancelar(modalVerEditar)">Aceptar</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+
+    <div class="modal-dialog modal-warning" role="document" *ngIf="opcion=='modificar'">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">{{titulo}}</h4>
+          <button type="button" class="close" (click)="cancelar(modalVerEditar)" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Nombre</span>
+              <input type="text" id="nombre" name="nombre" class="form-control" [(ngModel)]="usuarioVerEditar.nombre">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Apellido</span>
+              <input type="text" id="apellido" name="apellido" class="form-control" [(ngModel)]="usuarioVerEditar.apellido">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Usuario</span>
+              <input type="text" id="user" name="user" class="form-control" [(ngModel)]="usuarioVerEditar.user">
+              <span class="input-group-addon">
+                <i class="fa fa-user"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Contrasena</span>
+              <input type="password" id="pass" name="pass" class="form-control" [(ngModel)]="usuarioVerEditar.pass">
+              <span class="input-group-addon">
+                <i class="fa fa-key"></i>
+              </span>
+            </div>
+          </div>
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon" for="rol">Rol</span>
+              <select id="rol" name="rol" class="form-control" [(ngModel)]="usuarioVerEditar.rol">
+                <option value="{{administrador}}">{{administrador}}</option>
+                <option value="{{cajero}}">{{cajero}}</option>
+                <option value="{{mesero}}">{{mesero}}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="cancelar(modalVerEditar)">Cancelar</button>
+          <button type="button" class="btn btn-warning" (click)="guardarUsuario(modalVerEditar)">{{nombreBoton}}</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+
+  </div>
+  <!-- /.modal -->
+
+
+  <div bsModal #modalEliminar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-danger" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h4 class="modal-title">Confirmar</h4>
+          <button type="button" class="close" (click)="modalEliminar.hide()" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label type="text" id="elimiar" name="eliminar">Desea eliminar este Usuario</label>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" (click)="modalEliminar.hide()">No</button>
+          <button type="button" class="btn btn-danger" (click)="usuariosEliminar(modalEliminar)">Si</button>
+        </div>
+      </div>
+      <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+  </div>
+  <!-- /.modal -->

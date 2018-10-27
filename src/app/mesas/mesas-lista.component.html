@@ -1,0 +1,148 @@
+<div *ngIf="!mesas">
+	Cargando mesas...
+</div>
+
+<div class="row" *ngIf="mesas">      
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+          <div class="container">
+              <h3><i class="fa fa-align-justify"></i> Mesas</h3>
+          </div>
+        <div class="container" >
+            <div style="float:left;">
+                Filtrar por Identificador
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                  <input [(ngModel)]="filterQueryq" type="text" class="form-control" placeholder="identificador">
+                </div>
+            </div>
+            <div style="float:right;">
+                <br>
+                <mesas-nuevo></mesas-nuevo>
+            </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+        <table 
+        class="table table-striped" 
+        [mfData]="mesas | mesaFiltroIdentificador : filterQueryq" 
+        #mf="mfDataTable" 
+        [mfRowsOnPage]="rowsOnPage"
+        [(mfSortBy)]="sortBy"
+        [(mfSortOrder)]="sortOrder"
+        >
+          <thead>
+            <tr>
+              <th style="width: 40%">
+                  <mfDefaultSorter by="identificador">Identificador</mfDefaultSorter>
+              </th>
+              <th style="width: 20%"></th>
+              <th style="width: 20%"></th>
+              <th style="width: 20%"></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let mesa of mf.data; let i = index">
+              <td>{{mesa.identificador}}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="mesasDetalles(i, modalVerEditar)" ><i class="fa fa-eye" ></i>&nbsp; ver    </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-warning" (click)="mesasEditar(i,modalVerEditar)"><i class="fa fa-edit"></i>&nbsp; modificar</button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger"(click)="confirmaEliminar(mesa.idMesa, modalEliminar)"><i class="fa fa-eraser"></i>&nbsp; eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+              <tr>
+                <td colspan="4">
+                  <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]" ></mfBootstrapPaginator>
+                </td>
+              </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+<!--/.row-->
+
+
+
+<div  bsModal #modalVerEditar="bs-modal" [config]="{backdrop: 'static'}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document" *ngIf="opcion=='ver'">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{titulo}}</h4>
+      </div>
+      <div class="modal-body">
+
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Identificador</span>
+              <input class="form-control"  [(ngModel)]="mesaVerEditar.identificador" name="identificador" disabled>
+              <span class="input-group-addon"><i class="fa fa-key"></i></span>
+            </div>
+        </div>
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" (click)="mesasEditar(mesaVerEditar.idMesa, modalVerEditar)">{{nombreBoton}}</button>
+        <button type="button" class="btn btn-primary" (click)="cancelar(modalVerEditar)">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  
+  <div class="modal-dialog modal-warning" role="document" *ngIf="opcion=='modificar'">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{titulo}}</h4>
+      </div>
+      <div class="modal-body">
+          <form #formMesa="ngForm" id="form-Mesa">
+            <div class="form-group">
+                <div class="input-group">
+                  <span class="input-group-addon">Identificador</span>
+                  <input class="form-control"  [(ngModel)]="mesaVerEditar" name="identificador" #identificador="ngModel"  required>
+                  <span class="input-group-addon"><i class="fa fa-key"></i></span>
+                </div>
+                <div *ngIf="identificador.invalid && (identificador.dirty || identificador.touched)" class="alert alert-danger">
+                    <div *ngIf="identificador.errors.required">
+                      Campo vacio
+                    </div>
+                </div>
+            </div>
+          </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelar(modalVerEditar)">Cancelar</button>
+        <button [disabled]="!formMesa.form.valid" type="button" class="btn btn-warning" (click)="guardarMesa(modalVerEditar)" >{{nombreBoton}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div  bsModal #modalEliminar="bs-modal" [config]="{backdrop: 'static'}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmar</h4>
+      </div>
+      <div class="modal-body">
+          <label type="text" id="elimiar"  name="eliminar">Desea eliminar esta mesa</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalEliminar.hide()">No</button>
+        <button type="button" class="btn btn-danger" (click)="mesasEliminar(modalEliminar)">Si</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+

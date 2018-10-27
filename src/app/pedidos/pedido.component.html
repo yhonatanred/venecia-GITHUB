@@ -1,0 +1,546 @@
+<div class="container-fluid  prueba" style="
+height: 100%;">
+    <div class="row">
+        <div class="col-md-12 col-lg-10 col-xl-10">
+            <div class="row">
+                <div class="align-self-center widthContenedor1 d-md-dow-none">
+                    <!-- BOTÓN QUE REDIRIGE A 'MENU'-->
+                    <div class="row">
+                        <div class="col-md-3 col-lg-3 col-xl-3">
+                            <!-- Muestra si la mesa es diferente a vacio-->
+                            <a class="text-primary" style="align-content: center;" *ngIf="mesa != '' && mesa != '-1' && mostrarFila_pedido() && !verInputMesas" routerLinkActive="active"
+                                [routerLink]="['/menu/inicio', infoBasica(), mesa, numFactura, turno, actualiza_pedido, trMenu]">
+                                <i class="fa fa-hand-pointer-o fa-3x"></i>
+                                <strong>Carta</strong>
+                            </a>
+                            <!-- Muestra si la mesa está vacia-->
+                            <i class="fa fa-hand-pointer-o fa-3x tesxt-danger" *ngIf="mesa == '' || mesa == '-1' || !mostrarFila_pedido() || verInputMesas"></i>
+                            <strong *ngIf="mesa == '' || mesa == '-1' || verInputMesas">Carta</strong>
+                            <div [hidden]="rolTipo" class="text-primary" style="margin-top: 4em;">
+                                <!-- Muestra el modald e las ventas por dia-->
+                                <i class="fa fa-bar-chart fa-2x" (click)="verVentas(modalVentas)"></i>
+                            </div>
+                            <div class="text-primary d-md-dow-none" style="margin-top:1em;">
+                                <i class="fa fa-cut fa-2x" (click)="partirCuenta(modalPartirCuenta)"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="widthContenedor2">
+                    <div class="row">
+                        <!-- NUMERO DE MESA Y SUBTOTAL *ngIf="pedidos.length > 0"-->
+                        <div class="col-md-6 col-lg-6 col-xl-5">
+                            <div>
+                                <h6>&nbsp;</h6>
+
+                                <div class="card">
+                                    <div class="card-group mb-0">
+                                        <div class="card-body p-4 bg-primary text-white col-md-5 text-center">
+                                            <br>
+                                            <h5>Mesa</h5>
+                                            <h2 *ngIf="mesa != -1" class="letraMesa">{{mesa}}</h2>
+                                        </div>
+                                        <div class="card-body py-5 text-primary col-md-7">
+                                            <div class="text-primary ">
+                                                <div class="row">
+                                                    <div class="col">
+                                                        Descuento:
+                                                    </div>
+                                                    <div class="col text-right">
+                                                        ${{calcularDescuentoG() | number:0}}
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col">
+                                                        SubTotal:
+                                                    </div>
+                                                    <div class="col text-right">
+                                                        ${{redondear(subTotal) | number:0}}
+                                                    </div>
+                                                </div>
+                                                <div class="col text-center">
+                                                    {{productos.length}} Articulos
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="card-block p-0 text-center bg-secondary text-uppercase col-md-12 font-weight-bold vrTotal">
+                                        $ {{redondear(total) | number:0}}
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <!-- CONTENEDOR DE BOTONES PARA PEDIDOS E INPUTS PARA INFORMACION DEL CLIENTE Y MESEROS-->
+                        <div class="col-md-6 col-lg-4 col-xl-5">
+                            <h6>&nbsp;</h6>
+                            <!-- genera espacio en blanco en la parte superior-->
+                            <!-- Fila para botones de pedidos -->
+                            <div class="col-md-12 col-lg-12 col-xl-12">
+                                <div class="row">
+                                    <button type="button" *ngIf="!rolTipo" class="btn btn-warning col-xl-3 col-lg-6 col-md-6" (mousedown)="eventVerMesas()" (mouseup)="focusMesa()">Mesas</button>
+                                    <button type="button" *ngIf="!rolTipo" class="btn btn-warning col-xl-3 col-lg-6 col-md-6" (click)="eventBtnDomicilio()" (mouseup)="focusTelefono()">Domicilio</button>
+                                    <button type="button" *ngIf="!rolTipo" class="btn btn-warning col-xl-3 col-lg-6 col-md-6" (mousedown)="eventBtnLlevar()"
+                                        (mouseup)="focusCodigo()">Llevar</button>
+                                    <button type="button" *ngIf="rolTipo" class="btn btn-warning col-xl-4 col-lg-4 col-md-4" (mousedown)="eventVerMesas()" (mouseup)="focusMesa()">Mesas</button>
+                                    <button type="button" *ngIf="rolTipo" class="btn btn-warning col-xl-4 col-lg-4 col-md-4" (click)="eventBtnDomicilio()" (mouseup)="focusTelefono()">Domicilio</button>
+                                    <button type="button" *ngIf="rolTipo" class="btn btn-warning col-xl-4 col-lg-4 col-md-4" (mousedown)="eventBtnLlevar()" (mouseup)="focusCodigo()">Llevar</button>
+                                    <button type="button" [hidden]="rolTipo" class="btn btn-success col-xl-3 col-lg-6 col-md-6" (click)="eventBtnPagar(metodoPago)"
+                                        *ngIf="productos.length > 0">PAGAR</button>
+                                    <button type="button" [hidden]="rolTipo" class="btn btn-success col-xl-3 col-lg-6 col-md-6" *ngIf="productos.length == 0"
+                                        disabled>PAGAR</button>
+                                </div>
+                            </div>
+                            <br>
+                            <!-- Tabla para inputs-->
+                            <div class="col-md-12 col-lg-12 col-xl-12">
+                                <table class="row">
+                                    <tr *ngIf="verInputMesas">
+                                        <td>Mesa: </td>
+                                        <td>                                        
+                                            {{focusMesa()}}
+                                            <input type="text" class="inputDatos" id="mesa" [typeahead]="mesas" [(ngModel)]="mesa" (keyup)="eventInputMesa($event)" (ngModelChange)="guardaCambiosMayus()">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mesero: </td>
+                                        <td>
+                                            <input type="text" class="inputDatos" [value]="mesero" [(ngModel)]="mesero" [typeahead]="meseros" (ngModelChange)="guardaCambios()">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Telefono: </td>
+                                        <td>
+                                            <input type="text" [value]="telefono" id="telefono" [(ngModel)]="telefono" (keypress)="eventBuscar_Cliente($event, modalCliente)"
+                                                maxlength="10" onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
+                                                (ngModelChange)="guardaCambios()" class="inputDatos">
+
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Nombre: </td>
+                                        <td>
+                                            <input type="text" class="inputDatos" [value]="nombreC" [(ngModel)]="nombreC" (ngModelChange)="guardaCambios()">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Direcccion/NIT:</td>
+                                        <td>
+                                            <input type="text" class="inputDatos" [value]="direccion" [(ngModel)]="direccion" (ngModelChange)="guardaCambios()">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Empresa: </td>
+                                        <td>
+                                            <input type="text" class="inputDatos" [value]="empresa" [(ngModel)]="empresa" (ngModelChange)="guardaCambios()">
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <!-- contenedor para el numero de factura-->
+                        <div class="col-lg-2 col-xl-2 d-md-down-none">
+                            <h6>&nbsp;</h6>
+                            <div class="card text-white bg-primary cardTamaño">
+                                <div class="card-head">
+                                    <h5>&nbsp;</h5>
+                                    <h6 style="text-align:center;">
+                                        <b>°</b>Factura</h6>
+                                </div>
+                                <div class="card-body">
+                                    <div class="h5 mb-0" style="text-align:center;">{{numFactura}}</div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Fin de la fila superior-->
+                    <!-- TABLA PARA MOSTRAR EL PEDIDO DE UNA CUENTA-->
+                    <div class="container col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+                            <div class="col-md-4 col-lg-3 col-xl-3">
+                                <div class="row">
+                                    <a class="col text-primary d-lg-none d-xl-none" *ngIf="mesa != '' && mesa != '-1' && mostrarFila_pedido()" routerLinkActive="active"
+                                        [routerLink]="['/menu/inicio', infoBasica(), mesa, numFactura, turno, actualiza_pedido, trMenu]">
+                                        <i class="fa fa-hand-pointer-o fa-2x"></i>
+                                    </a>
+                                    <i class="col fa fa-hand-pointer-o fa-2x d-lg-none d-xl-none" *ngIf="mesa == '' || mesa == '-1' || !mostrarFila_pedido()"></i>
+                                    <div class="col text-primary d-lg-none d-xl-none">
+                                        <i class="fa fa-cut fa-2x" (click)="partirCuenta(modalPartirCuenta)"></i>
+                                    </div>
+
+                                    <i class="col fa fa-align-justify">Pedido Hora:{{hora}}</i> 
+                                    <!-- Pedido No. # &nbsp; Hora:{{hora}}-->
+                                </div>
+                            </div>
+                            <div class="col-md-8 col-lg-9 col-xl-9">
+                                <button type="button" class="btn btn-danger" (click)="eventEnviar()" *ngIf="prodsNoEnviados()">Enviar</button>
+                                <button type="button" class="btn btn-danger" *ngIf="!prodsNoEnviados()" disabled>Enviar</button>
+
+                                <button type="button" class="btn btn-primary" (click)="eventCuenta()" *ngIf="pedido_actual != undefined">Cuenta</button>
+                                <button type="button" class="btn btn-primary" *ngIf="pedido_actual == undefined" disabled>Cuenta</button>
+
+                                <button type="button" [hidden]="rolTipo" class="btn btn-primary" (click)="eventAcomulado(acomuladoModal)">Diario</button>
+
+                                <button type="button" [hidden]="rolTipo" class="btn btn-primary" (click)="eventDescuentoGlobal(descuentoModal)" *ngIf="pedido_actual != undefined && pedido_actual.descuentoG == 0">Descuento</button>
+                                <button type="button" [hidden]="rolTipo" class="btn btn-primary" *ngIf="pedido_actual == undefined || pedido_actual.descuentoG != 0"
+                                    disabled>Descuento</button>
+
+                                <button type="button" [hidden]="rolTipo" class="btn btn-primary" *ngIf="verBtnCambio()" (click)="eventCambio(cambiarModal)">Cambiar</button>
+                                <button type="button" [hidden]="rolTipo" class="btn btn-primary" *ngIf="!verBtnCambio()" disabled>Cambiar</button>
+                                <button type="button" [hidden]="rolTipo" class="btn btn-primary d-md-down-none" (click)="mostrarFacturas(facturas)">Facturas</button>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="container col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+                            <table class="table table-fixed">
+                                <thead>
+                                    <tr>
+                                        <th class="col-1 col-lg-1 text-center">Codigo</th>
+                                        <th class="col-1 col-lg-1 text-center">Cantidad</th>
+                                        <th class="col-3 col-lg-3 text-center">Producto</th>
+                                        <th class="col-1 col-lg-1 text-center">% Desc</th>
+                                        <th class="col-1 col-lg-1 text-center">Valor U.</th>
+                                        <th class="col-2 col-lg-2 text-center"> Valor Total</th>
+                                        <th class="col-1 col-lg-1 text-center">Sitio</th>
+                                        <th class="col-1 col-lg-1 text-center">Usuario</th>
+                                        <th class="col-1 col-lg-1 text-center">Tr</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="bodyPedidos">
+
+                                    <tr *ngFor="let producto of productos; let i = index">
+                                        <!-- Codigo-->
+                                        <td class="col-1 col-lg-1 text-center" (dblclick)="eventHabilitar_Edicion(i, producto.editar)">{{producto.idProducto}}</td>
+
+                                        <!-- Cantidad-->
+                                        <td class="col-1 col-lg-1 text-center" (dblclick)="eventHabilitar_Edicion(i, producto.editar)">{{producto.cantidad}}</td>
+
+                                        <!-- Producto-->
+                                        <td class="col-3 col-lg-3 text-center" (dblclick)="eventHabilitar_Edicion(i, producto.editar)">{{producto.nombreP}} </td> <!-- {{gustosString(producto.gustos)}} -->
+
+                                        <!-- % Desc-->
+                                        <td class="col-1  col-lg-1 text-center" *ngIf="!producto.editar" (dblclick)="eventHabilitar_Edicion(i, producto.editar)">{{producto.descuentoP}}</td>
+                                        <td class="col-1  col-lg-1 text-center" *ngIf="producto.editar">
+                                            <!-- editar-->
+                                            <input type="text" class="inputpeque" size="2" onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
+                                                [value]="producto.descuentoP" id="descuentoP" (keyup)="eventDescuento($event, i, auditoriaModal)">
+                                        </td>
+                                        <!-- Valor UN.-->
+                                        <td class="col-1 col-lg-1 text-center" *ngIf="!producto.editar" (dblclick)="eventHabilitar_Edicion(i, producto.editar)">{{producto.precioP | number:0}}</td>
+                                        <td class="col-1 col-lg-1 text-center" *ngIf="producto.editar">
+                                            <!-- editar [(ngModel)]="producto.precioP" (keydown)="estadoAuditoria($event)"-->
+                                            <input type="text" class="inputpeque" size="5" id="precioU" onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;"
+                                                [value]="producto.precioP" (keyup)="eventGuardar_edicion($event, i, auditoriaModal)">
+                                        </td>
+                                        <!-- Valor Total-->
+                                        <td class="col-2 col-lg-2 text-center">
+                                            {{ calcularVT(producto.precioP, producto.descuentoP, producto.cantidad) | number:0}}
+                                        </td>
+                                        <!-- Sitio-->
+                                        <td class="col-1 col-lg-1 text-center" (dblclick)="eventHabilitar_Edicion(i, producto.editar)">{{producto.comanda}}</td>
+
+                                        <!-- Usuario-->
+                                        <td class="col-1 col-lg-1 text-center">{{producto.usuario}}</td>
+                                        <!-- eliminar(i)-->
+                                        <td class="col-1 col-lg-1 text-center" (dblclick)="eventEliminar(borrarModal, i)">{{producto.tr}}</td>
+                                    </tr>
+                                    <!-- FILA PARA AGREGAR UN NUEVO PEDIDO-->
+
+                                    <tr *ngIf="mesa != '' && mesa != '-1' || verInputMesas">
+                                        <!-- Codigo-->
+                                        <td class="col-1 col-lg-1 text-center">
+                                            <input type="text" class="inputpeque" size="5" [typeahead]="codigosProductos" id="nCodigo" (keypress)="cantidadProd($event, modalCantidad)"
+                                                [(ngModel)]="nuevoProducto.idProducto" (keyup)="buscarProducto(nuevoProducto.idProducto, $event)">
+                                        </td>
+                                        <!-- Cantidad-->
+                                        <td class="col-1 col-lg-1 text-center">
+                                        </td>
+                                        <!--producto-->
+                                        <td class="col-3 col-lg-3">
+                                        </td>
+
+                                        <!-- % Desc-->
+                                        <td class="col-1 col-lg-1 text-center">
+                                        </td>
+
+                                        <td class="col-1 col-lg-1 text-center">
+                                            <!-- editar-->
+                                            <!-- <input type="text" class="form-control" [(ngModel)]="nuevoProducto.precioP"> -->
+                                        </td>
+                                        <!-- Valor Total-->
+                                        <td class="col-2 col-lg-2 text-center">
+                                            <!-- {{ calcularVT(nuevoProducto.precioP, nuevoProducto.descuentoP, nuevoProducto.cantidad) }} -->
+                                        </td>
+                                        <!-- Sitio-->
+                                        <td class="col-1 col-lg-1 text-center">
+                                        </td>
+                                        <!-- Usuario-->
+                                        <td class="col-1 col-lg-1 text-center">{{nuevoProducto.usuario}}</td>
+                                        <!--Tr-->
+                                        <td class="col-1 col-lg-1 text-center">
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- CONTENEDOR DE BOTONES PARA MOSTRAR LAS MESAS-->
+                    <div class="container col-md-12 col-lg-12 col-xl-12">
+                        <div class="row">
+                            <button (click)="scrollMesas(-400, 0)" class="text-primary col-md-1 col-lg-1 col-xl-1 botonScroll">
+                                <i class="fa fa-mail-reply fa-2x"></i>
+                            </button>
+                            <div id="scrollMesas" class="col-md-10 col-lg-10 col-xl-10">
+                                <div class="btn-group">
+                                    <div *ngFor="let pedido of pedidos; let i = index">
+                                        <button type="button" class="btn btn-primary botonMesa" (click)="eventBtnVerPedido(i)" *ngIf="!pedido.impCuenta">
+                                            {{pedido.mesa}}
+                                        </button>
+                                        <button type="button" class="btn btn-danger botonMesa" (click)="eventBtnVerPedido(i)" *ngIf="pedido.impCuenta">
+                                            {{pedido.mesa}}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button (click)="scrollMesas(400, 0)" class="text-primary col-md-1 col-lg-1 col-xl-1 botonScroll">
+                                <i class="fa fa-mail-forward fa-2x"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- FIN DEL CONTENEDOR DE LA FILA SUPERIOR E INFERIOR-->
+            </div>
+        </div>
+        <!-- Contenedor para domicilios-->
+
+        <div class="col-md-12 col-lg-2 col-xl-2 text-center">
+            <h6>&nbsp;</h6>
+            <h5 style="text-align:center;">Domicilios</h5>
+            <div class=" h4 text-center text-primary mb-4">
+                <i class="icon-speedometer fa-2x"></i>
+                <i class="icon-speedometer fa-2x"></i>
+            </div>
+            <div class="row">
+                <div class="contenedorDomi">
+                    <ng-container *ngFor="let domicilio of domicilios; let i = index">
+                        <button type="button" class="btn btn-primary botonDomicilio" *ngIf="!domicilio.impCuenta" (click)="eventBtnVerDomicilio(i)">
+                            {{domicilio.mesa}}
+                        </button>
+                        <button type="button" class="btn btn-danger botonDomicilio" *ngIf="domicilio.impCuenta" (click)="eventBtnVerDomicilio(i)">
+                            {{domicilio.mesa}}
+                        </button>
+                    </ng-container>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div>
+            <!--  MODAL DE AUDITORIA CUANDO SE CAMBIA EL PRECIO DE UN PRODUCTO-->
+
+            <div bsModal #auditoriaModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+                [config]="{backdrop: 'static'}">
+                <div class="modal-dialog modal-sm modal-warning" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5>Auditoria</h5>
+                        </div>
+                        <div class="modal-body">
+                            <!--Cuerpo del modal -->
+                            <h6>Razón por la que se cambia el precio del producto</h6>
+                            <textarea rows="3" cols="30" [(ngModel)]="justificacion">
+                            </textarea>
+                        </div>
+                        <!--Aqui termina el cuerpo -->
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-warning" (click)="eventHideAuditoria(auditoriaModal)">Cancelar</button>
+                            <button type="button" class="btn btn-primary" (click)="eventJustificar(justificacion, auditoriaModal)">Aceptar</button>
+                        </div>
+                    </div>
+                    <!-- /.modal-content -->
+                </div>
+                <!-- /.modal-dialog -->
+            </div>
+            <!-- /.modal -->
+
+            <!-- MODAL PARA VISUALIZAR EL METODO DE PAGO-->
+            <metodo-pago #metodoPago [total]="total" [pedido]="pedido_actual" [padre]="this" [mesa]="mesa" [propina]="calcPropina()"></metodo-pago>
+        </div>
+
+
+
+        <!---------------------------------------------
+        ---- MODAL PARA APLICAR UN DESCUENTO GLOBAL ---
+        ------------------------------------------------ -->
+
+        <div bsModal #descuentoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+            [config]="{backdrop: 'static'}">
+            <!-- Si va a crear un nuevo gusto muestra el modal verde-->
+            <div class="modal-dialog modal-sm modal-warning" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <!-- Titulo para crear un nuevo gusto-->
+                        <h4 class="modal-title">Descuento Global %</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!--Cuerpo del modal -->
+                        {{focusPorc()}}
+                        <label for="descuentoG">Descuento en %</label>
+                        <input type="number" class="form-control" [(ngModel)]="porcDescuentoGlobal" id="descuentoG" (keypress)="eventInpoutDesc($event, descuentoModal, modalAudGlobal)">
+                        <br>
+                        <h5>Valor: ${{calculoModalDescuento() | number:0}}</h5>
+                        <!-- Alerta de ERROR-->
+                        <alert type="danger" *ngIf="verError">
+                            <strong>Campo vacio!</strong> Por favor rellene el campo
+                        </alert>
+                    </div>
+                    <!--Aqui termina el cuerpo -->
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-warning" (click)="eventCerrarDesc(descuentoModal)">Cancelar</button>
+                        <button type="button" class="btn btn-primary" (click)="eventAceptarDesc(descuentoModal, modalAudGlobal)">Aceptar</button>
+                    </div>
+                </div>
+                <!-- /.modal-content -->
+            </div>
+            <!-- /.modal-dialog -->
+        </div>
+        <!-- /.modal -->
+
+        <!-- MODAL PARA AGREGAR NUEVO CLIENTE ******************** 29-11-2018-->
+        <clientes-nuevo #modalCliente [telefonoC]="telefono" (pasarCliente)="pasarCliente($event)"></clientes-nuevo>
+    </div>
+</div>
+
+<!--  MODAL DE AUDITORIA CUANDO SE APLICA UN DESCUENTO GLOBAL-->
+
+<div bsModal #modalAudGlobal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-sm modal-warning" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Auditoria</h5>
+            </div>
+            <div class="modal-body">
+                <!--Cuerpo del modal -->
+                <h6>Razón del descuento global</h6>
+                <textarea rows="3" cols="30" [(ngModel)]="justificacionG">
+                </textarea>
+            </div>
+            <!--Aqui termina el cuerpo -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" (click)="eventCerrarDesc(modalAudGlobal)">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="guardarDescGlobal(modalAudGlobal)">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- MODAL HIJO PARA LA CANTIDAD CUANDO SE SOLICITA UN NUEVO PRODUCTO DESDE AQUÍ-->
+<cantidad-pedido #modalCantidad (pasarCantidad)="pasarCantidad($event)"></cantidad-pedido>
+
+
+<!--------------------------------------------------------
+        ---- MODAL PARA MOSTRAR LAS VENTAS ACOMULADAS ---
+        ------------------------------------------------ -->
+
+<div bsModal #acomuladoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <!-- Si va a crear un nuevo gusto muestra el modal verde-->
+    <div class="modal-dialog modal-sm modal-success" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Titulo para crear un nuevo gusto-->
+                <h4 class="modal-title">Ventas acomuladas</h4>
+            </div>
+            <div class="modal-body">
+                <!--Cuerpo del modal -->
+                <h1>$ {{acomulado | number:0}}</h1>
+            </div>
+            <!--Aqui termina el cuerpo -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-success" (click)="acomuladoModal.hide()">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<!-- LLAMA A COMPONENTE PARA VISUALIZAR LAS VENTAS -->
+<modal-ventas-dia #modalVentas></modal-ventas-dia>
+<!-- LLAMA A COMPONENTE PARA VISUALIZAR LAS FACTURAS -->
+<facturas #facturas></facturas>
+
+<!-- LLAMA A modal PARA partir LAS cuentas -->
+<partir-cuenta #modalPartirCuenta [mesaActual]="enviar_pedido" [mesas]="enviar_pedidos" (pasarMesas)="pasarMesas($event,modalPartirCuenta)"></partir-cuenta>
+
+<!--  MODAL DE AUDITORIA CUANDO SE APLICA UN DESCUENTO GLOBAL-->
+
+<div bsModal #borrarModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}" id="audBorrar">
+    <div class="modal-dialog modal-sm modal-warning" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5>Auditoria</h5>
+            </div>
+            <div class="modal-body">
+                <!--Cuerpo del modal -->
+                <h6>Razón por la que se borra el producto</h6>
+                <textarea rows="3" cols="30" [(ngModel)]="justificacionB">
+            </textarea>
+            </div>
+            <!--Aqui termina el cuerpo -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-warning" (click)="eventCerrarModal_borrar(borrarModal)">Cancelar</button>
+                <button type="button" class="btn btn-primary" (click)="eventBorrar_producto(borrarModal)">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+
+
+<!--------------------------------------------------------
+        ---- MODAL PARA HACER EL CAMBIO DE MESA ---
+        ------------------------------------------------ -->
+
+<div bsModal #cambiarModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <!-- Si va a crear un nuevo gusto muestra el modal verde-->
+    <div class="modal-dialog modal-sm modal-danger" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <!-- Titulo para crear un nuevo gusto-->
+                <h4 class="modal-title">Cambiar mesa</h4>
+                <h6>Mesa actual {{mesa}}</h6>
+            </div>
+            <div class="modal-body">
+                {{focusCambio()}}
+                <input type="text" id="cambiar" class="form-control" [(ngModel)]="cambioMesa" [typeahead]="mesas" (keyup)="eventInputCambiar(cambiarModal, $event)" (ngModelChange)="guardaCambiosMayus()">
+            </div>
+            <!--Aqui termina el cuerpo -->
+            <alert type="danger" *ngIf="verAlerta">
+                <strong>{{mensajeAlerta}}</strong>
+            </alert>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="cerrarCambiarMesa(cambiarModal)">Cerrar</button>
+                <button type="button" class="btn btn-danger" (click)="cambiarMesa(cambiarModal)">Cambiar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

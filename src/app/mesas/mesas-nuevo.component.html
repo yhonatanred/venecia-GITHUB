@@ -1,0 +1,44 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" (click)="mostrarModal(modalNuevaMesa)">
+  <i class="fa fa-user"></i>&nbsp; {{nuevaMesa}}
+</button>
+
+
+<div bsModal #modalNuevaMesa="bs-modal" [config]="{backdrop: 'static'}" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{nuevaMesa}}</h4>
+      </div>
+      <div class="modal-body">
+        <form #formMesa="ngForm" id="form">
+
+          <alert type="danger" *ngIf="mostrarAlert" dismissOnTimeout='2000'>
+            <strong>Alerta!</strong> Mesa ya registrada
+          </alert>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Identificador</span>
+              <input class="form-control" [(ngModel)]="mesa.identificador" name="identificador" #identificador="ngModel" required>
+              <span class="input-group-addon" *ngIf="identificador.valid">
+                <i class="fa fa-check text-success"></i>
+              </span>
+              <span class="input-group-addon" *ngIf="identificador.invalid">
+                <i class="fa fa-ban text-danger"></i>
+              </span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalNuevaMesa.hide()">{{cancelar}}</button>
+        <button [disabled]="!formMesa.form.valid" type="button" class="btn btn-primary" (click)="guardarMesa(modalNuevaMesa)">{{guardar}}</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -1,0 +1,61 @@
+<!-- ------ MODAL PARA MOSTRAR LOS VENTAS DEL DIA -------- -->
+<div bsModal #propinasModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+[config]="{backdrop: 'static'}">
+<div class="modal-dialog modal-md modal-primary" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+
+      <div class=" row">
+        <h4 class="modal-title col-md-12">Propinas</h4>
+        <div class="col-md-8 col-xs-7 col-sm-4">
+          <div class="form-group">
+            <div class="input-group">
+              <input type="text" class="form-control" [bsConfig]="bsConfig"  bsDaterangepicker [(ngModel)]="fecha">
+              <div class="input-group-btn">
+                <button class="btn btn-success" (click)="buscar()">Buscar</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-body">
+      <!--Cuerpo del modal -->
+      <div style="height: 180pt; overflow-y: auto;">
+        <table class="table table-bordered table-sm table-codensed">
+          <thead>
+            <tr>
+              <th class="text-center">Fecha</th>
+              <th class="text-center">Propina</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let dato of datos">
+              <td class="text-center">{{dato.fechaF}}</td>
+              <td class="text-center">{{dato.propina | number:0}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <br>
+      <div class="container col-md-7">
+        <div class="row text-white">
+
+          <span class="input-group-addon col-md-5 bg-success"><h2>Total</h2></span>
+          <label class="input-group-addon col-md-7 text-white bg-secondary text-right">
+            <h4>$ {{total | number:0}}</h4>
+          </label>
+        </div>
+      </div>
+    </div>
+    <!--Aqui termina el cuerpo -->
+    <div class="modal-footer">
+      <button type="button" style="cursor: pointer" class="btn btn-success" (click)="hideModal()">Cerrar</button>
+    </div>
+  </div>
+  <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

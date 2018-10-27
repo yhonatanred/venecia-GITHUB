@@ -1,0 +1,59 @@
+﻿<div class="app flex-row align-items-center">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-8 col-lg-9 col-xl-9">
+                <div class="card-group mb-0">
+                    <div class="card p-4">
+                        <div class="card-body">
+                            <h1>Iniciar sesión</h1>
+                            <p class="text-muted">
+                                Iniciar sesión en su cuenta
+                            </p>
+                            <alert></alert>
+                            <form name="form" (ngSubmit)="f.form.valid && login()" #f="ngForm" novalidate>
+                                <div class="input-group mb-3" [ngClass]="{ 'has-error': f.submitted && !username.valid }">
+                                    <span class="input-group-addon">
+                                        <i class="icon-user"></i>
+                                    </span>
+                                    <input type="text" class="form-control" placeholder="Usuario" name="username" [(ngModel)]="model.username" #username="ngModel"
+                                        required />
+                                </div>
+                                <div *ngIf="f.submitted && !username.valid" class="help-block">Usuario es requerido</div>
+                                <div class="input-group mb-4" [ngClass]="{ 'has-error': f.submitted && !password.valid }">
+                                    <span class="input-group-addon">
+                                        <i class="icon-lock"></i>
+                                    </span>
+                                    <input type="password" class="form-control" placeholder="Contraseña" name="password" [(ngModel)]="model.password" #password="ngModel"
+                                        required />
+                                </div>
+                                <div *ngIf="f.submitted && !password.valid" class="help-block">Contraseña es requerido</div>
+                                <div class="input-group">
+                                    <button [disabled]="loading" class="btn btn-primary">Iniciar</button>
+                                    <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="
+                                    />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+                        <div class="card-body text-center">
+                            <div>
+                                <carousel>
+                                    <slide>
+                                        <img src="http://localhost/appVeneccia/src/app/img/fondo1.jpg" alt="First slide" width="200" height="200">
+                                    </slide>
+                                    <slide>
+                                        <img src="http://localhost/appVeneccia/src/app/img/fondo2.jpg" alt="Second slide" width="200" height="200">
+                                    </slide>
+                                    <slide>
+                                        <img src="http://localhost/appVeneccia/src/app/img/fondo3.jpg" alt="Third slide" width="200" height="200">
+                                    </slide>
+                                </carousel>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

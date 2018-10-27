@@ -1,0 +1,17 @@
+hr {
+    height: 1px;
+    border: 0;
+    background-color: white;
+}
+div.centerTable{
+    text-align: center;
+}
+div.centerTable table {
+   margin: 0 auto;
+   text-align: left;
+}
+
+.scrollTabla{
+    height: 180pt;
+    overflow-y: auto;
+}

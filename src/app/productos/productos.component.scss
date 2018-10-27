@@ -1,0 +1,14 @@
+
+//estilo para el select del autollenado
+.search-drop-down {
+    position: absolute;
+    width: auto;//10%;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 10;
+    background-color: #F6F6F6;
+    font-family: sans-serif;
+    opacity: 0.98;
+}
+
+

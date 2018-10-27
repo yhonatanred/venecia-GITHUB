@@ -1,0 +1,241 @@
+<div class="container-fluid">
+  <div *ngIf="!subcategorias">
+    <h4>Por favor espere un momento, obteniendo datos...</h4>
+  </div>
+
+
+  <div *ngIf="subcategorias">
+
+    <button type="button" class="btn btn-warning" (click)="atras()">
+      <i class="fa fa-chevron-left fa-lg"></i> Volver</button>
+
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <input type="text" id="input3-group1" name="buscar" class="form-control" placeholder="buscar..." [(ngModel)]="buscar" (keyup)="eventoBuscarSubCategoria($event)">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" (click)="eventoBuscarSubCategoria($event)">
+              <i class="fa fa-search"></i> Buscar</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+      </div>
+
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <i class="fa fa-file-text fa-lg"></i>
+          </span>
+          <input type="text" id="input3-group1" name="nSubCategoria" [(ngModel)]="nombre" class="form-control" placeholder="nueva subcategoria"
+            (keypress)="eventoCrear($event, pop)">          
+          <input [(colorPicker)]="color" [style.background]="color" class="form-control" [value]="color" placeholder="color..." [cpPosition]="('bottom')"
+            (keypress)="validaColor($event, pop)" [(ngModel)]="color" (blur)="pop.hide()" maxlength="7" />
+            <span tooltip="Por favor ingrese minimo 6 caracteres" triggers="" #pop="bs-tooltip"  placement="bottom">
+            </span>
+          <!-- </span> -->
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success" (click)="guardarSubCateg(pop)">
+              <i class="fa fa-plus-square fa-lg"></i> Crear</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <!--tabla para mostrar las categorias -->
+
+    <!--<div class="col-lg-6"> -->
+    <div class="card">
+      <div class="card-header">
+        <div class="container">
+          <h3>
+            <i class="fa fa-align-justify"></i> Subcategoria</h3>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon" for="rol">Ver</span>
+            <select id="categoria" name="categoria" class="form-control" [(ngModel)]="idCateg" (change)="eventoObtenerSubcategoria($event)">
+              <option [value]="-1">Todo</option>
+              <option *ngFor="let categoria of categorias" [value]="categoria.id" [selected]="categoria.id==idCateg ? true : null">
+                {{categoria.nombre}}
+              </option>
+            </select>
+          </div>
+        </div>
+      </div>
+      <!--Aqui termina el titulo de la tabla-->
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th> </th>
+              <th> </th>
+              <th>Productos</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let subcategoria of subcategorias; let i = index">
+              <td>{{consecutivo(i+1)}}</td>
+              <td>
+                {{subcategoria.nombre}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-warning" data-toggle="modal" (click)="muestraVarEnModal(i);subcategModal.show()">
+                  <span>
+                    <i class="fa fa-pencil fa-lg"></i>
+                  </span> Modificar
+
+                </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" (click)="modalEliminarSubCategoria(i, eliminarModal)">
+                  <span>
+                    <i class="fa fa-trash-o fa-lg"></i>
+                  </span> Eliminar
+                </button>
+              </td>
+              <td>
+                <a class="btn btn-primary" data-toggle="modal" [routerLink]="['/productos', subcategoria.nombre]">
+                  <span>
+                    <i class="fa fa-product-hunt fa-lg"></i>
+                  </span> Ver
+                </a>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        <ul class="pagination">
+          <li class="page-item">
+            <button type="button" class="btn btn-primary" (click)="anteriorRango()" *ngIf="primer == 0" disabled>
+              <i class="fa fa-chevron-left fa-lg"></i> Atras</button>
+            <button type="button" class="btn btn-primary" (click)="anteriorRango()" *ngIf="primer > 0">
+              <i class="fa fa-chevron-left fa-lg"></i> Atras</button>
+            <!-- <input type="button" value="Previo" (click)="anteriorRango()"> -->
+          </li>
+          <li>&nbsp;</li>
+          <button type="button" class="btn btn-primary" (click)="siguienteRango()" *ngIf="ultimo < tamanioResult">Siguiente
+            <i class="fa fa-chevron-right fa-lg"></i>
+          </button>
+          <button type="button" class="btn btn-primary" (click)="siguienteRango()" *ngIf="ultimo >= tamanioResult" disabled>Siguiente
+            <i class="fa fa-chevron-right fa-lg"></i>
+          </button>
+          <!-- <input type="button" value="Previo" (click)="siguienteRango()"> -->
+        </ul>
+      </div>
+    </div>
+    <!-- </div> -->
+
+
+
+    <!--VENTANA MODAL  PARA MODIFICAR SUBCATEGORIAS-->
+    <div bsModal #subcategModal="bs-modal" class="modal fade" id="modalSubCateg" tabindex="-1" role="dialog" aria-labelledby="SubcategModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-sm modal-warning" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Renombrar categoria</h4>
+            <button type="button" class="close" (click)="SubcategModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <!-- <form> -->
+            <div class="form-group">
+              <label for="modifica-categ" class="form-control-label">Nuevo nombre:</label>
+              <input type="text" class="form-control" id="modifica-categ" [(ngModel)]="nuevNombre" name="nombreCateg" (keypress)="eventoRenombrar($event, subcategModal)">
+              <label for="modifica-color" class="form-control-label">Nuevo color:</label>
+              <span tooltip="Por favor ingrese minimo 6 caracteres" triggers="" #pop2="bs-tooltip">
+                <input [(colorPicker)]="nuevoColor" [style.background]="nuevoColor" class="form-control" [value]="nuevoColor" placeholder="nuevo color..."
+                  [(ngModel)]="nuevoColor" (keypress)="validaColorEditar($event, subcategModal)" />
+              </span>
+            </div>
+            <!-- </form> -->
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="subcategModal.hide(); limpiarModal()">Cerrar</button>
+            <button type="button" class="btn btn-warning" (click)="renombrarSubCategoria(subcategModal)">Guardar cambios</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <!-- VENTANA MODAL PARA ELIMINAR-->
+    <div bsModal #eliminarModal="bs-modal" class="modal fade" id="modalSubCateg" tabindex="-1" role="dialog" aria-labelledby="subcategModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-danger" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Eliminar {{nombre}}</h4>
+            <button type="button" class="close" (click)="eliminarModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <h6>Esta subcategoria contiene productos. ¿Desea eliminarlos tambien?</h6>
+            <!--Aqui comienza el dropdown-->
+
+            <div class="input-group-btn row" dropdown *ngIf="opcion.opc1=='No'">
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+              <div class="col-sm-4">
+                <button type="button" class="btn btn-warning dropdown-toggle" dropdownToggle>{{opcion.opc1}}
+                  <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" *dropdownMenu>
+                  <a class="dropdown-item" (click)="cambiarOpcion()">{{opcion.opc2}}</a>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+            </div>
+            <!--Aqui termina el dropdown-->
+
+            <!--Aqui comienza el dropdown para mostrar el boton en rojo-->
+            <div class="input-group-btn row" dropdown *ngIf="opcion.opc1=='Si'">
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+              <div class="col-sm-4">
+                <button type="button" class="btn btn-danger dropdown-toggle" dropdownToggle>{{opcion.opc1}}
+                  <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" *dropdownMenu>
+                  <a class="dropdown-item" (click)="cambiarOpcion()">{{opcion.opc2}}</a>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+            </div>
+            <!--Aqui termina el dropdown-->
+
+
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="cerrarModalEliminar(eliminarModal)">Cerrar</button>
+            <button type="button" class="btn btn-danger" (click)="eliminarSubCategoria(eliminarModal)">Eliminar</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+  </div>
+</div>

@@ -1,0 +1,217 @@
+<div class="container-fluid">
+  <!-- Me muestra el alerta de: nuevo producto guardado-->
+  <alert type="success" dismissOnTimeout='4000' *ngIf="verAlerta">
+    <strong>Operacion satisfactoria!</strong> {{mensaje}}
+  </alert>
+  <!-- Alerta de ERROR-->
+  <alert type="danger" *ngIf="verError">
+    <strong>Alerta!</strong> {{mensaje}}
+  </alert>
+  <!-- ADVERTENCIA-->
+  <alert type="warning" *ngIf="verAdvertencia">
+    <strong>Sugerencia!</strong> {{mensaje}}
+  </alert>
+
+  <br>
+  <div class="row">
+    <!-- BUSQUEDA-->
+    <div class="col-sm-4">
+      <div class="input-group">
+        <span class="input-group-addon">
+          <i class="fa fa-search"></i>
+        </span>
+        <input type="text" id="input3-group1" name="buscar" class="form-control" placeholder="Filtro nombre | subcategoria" [(ngModel)]="buscar"
+          (keyup)="eventBuscarProducto()">
+        <span class="input-group-btn">
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tabla Productos-->
+  <div class="card">
+    <div class="card-header">
+      <h3>
+        <i class="fa fa-align-justify"></i> Productos</h3>
+    </div>
+    <div class="card-body">
+      <table class="table table-bordered table-striped table-sm">
+        <thead>
+          <tr>
+            <th>Codigo
+            </th>
+            <th>
+              Categoria
+            </th>
+            <th>
+                Subcategoria
+            </th>
+            <th>
+              Producto
+            </th>
+            <th>$ Precio</th>
+            <th>Gustos</th>
+            <th>Comanda</th>
+            <th>Color</th>
+            <th>Desactivado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- --------------------------------- -->
+          <!-- FILA PARA CREAR UN NUEVO PRODUCTO -->
+          <!-- --------------------------------- -->
+          <tr>
+            <td>
+              <!--codigo producto-->
+              <input type="text" [(ngModel)]="codigo" class="form-control" name="codigo" placeholder="codigo prod." id="codigo" autofocus>
+            </td>
+            <td>
+              <!--categoria producto-->
+              <input [(ngModel)]="categSeleccion" [typeahead]="nombreCateg" class="form-control" placeholder="categoria...">
+            </td>
+            <!--Subcategoria del producto-->
+            <td>
+              <input [(ngModel)]="subCategSeleccion" [typeahead]="nombreSubCateg" class="form-control" placeholder="subcategoria..." (focus)='openSubCategorias()'>
+            </td>
+            <!--Nombre del producto-->
+            <td>
+              <input type="text" [(ngModel)]="nombre" class="form-control" id="nombProducto" name="nombre" placeholder="nombre prod..." maxlength="35">
+            </td>
+            <!--Precio del producto -->
+            <td>
+              <input type="number" [(ngModel)]="precio" class="form-control" name="precio" placeholder="$ xxxx">
+            </td>
+            <!--Gustos del producto -->
+            <td>
+              <div style="text-align: center" *ngIf="numGustos>0">
+                <span class="badge badge-primary">{{numGustos}}</span>
+              </div>
+              <input type="text" class="form-control" id="gustos" name="gustos" placeholder="ENTER" (keydown)="eventGustos($event, modal, categSeleccion, -1)">
+              <!--(click)="gustosModal.show()" (focus)="gustosModal.show()" -->
+              <!-- <p style="text-align: center"><span class="badge badge-danger"> NO </span></p> -->
+            </td>
+            <td>
+              <!-- comanda -->
+              <select id="comanda" name="comanda" class="form-control" [(ngModel)]="selectComanda">
+                <option [value]="-1">Seleccione una opcion</option>
+                <option *ngFor="let comanda of comandas" [value]="comanda.id">
+                  {{comanda.nombre}}
+                </option>
+              </select>
+            </td>
+            <td>
+              <!-- color -->
+              <div>
+                <!-- ToolTip-->
+                <span tooltip="Por favor ingrese minimo 6 caracteres" triggers="" #pop="bs-tooltip">
+
+                  <input [(colorPicker)]="color" [style.background]="color" [cpPosition]="('bottom')" maxlength="7" class="form-control" placeholder="color..."
+                    [(ngModel)]="color" (keypress)="validaColor($event, pop)" (blur)="pop.hide()" />
+
+                </span>
+              </div>
+            </td>
+            <td>
+              <!-- Swiche Desactivado-->
+              <label class="switch switch-icon switch-pill switch-danger">
+                <input type="checkbox" class="switch-input" disabled>
+                <span class="switch-label" data-on="&#xf00c;" data-off="&#xf00d;"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </td>
+
+          </tr>
+
+          <tr *ngFor="let producto of productos; let i=index">
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra / Modifica codigo-->
+              <div *ngIf="!producto.editar">{{producto.codigo}}</div>
+              <input type="text" class="form-control" [(ngModel)]="producto.codigo" [value]="producto.codigo" name="editCodigo" placeholder="codigo prod."
+                id="editCodigo" *ngIf="producto.editar" (keyup)="eventoGuardaEdicion($event, popMod, i)">
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra / Modifica categoria-->
+              <div *ngIf="!producto.editar">{{producto.categoria}}</div>
+              <input type="text" class="form-control" [(ngModel)]="producto.categoria" [typeahead]="nombreCateg" [value]="producto.categoria"
+                name="editCategoria" placeholder="categoria." id="editCodigo" *ngIf="producto.editar" (keyup)="eventoGuardaEdicion($event, popMod, i)">
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra / Modifica subCategoria-->
+              <div *ngIf="!producto.editar">{{producto.subCategoria}}</div>
+              <input type="text" class="form-control" [(ngModel)]="producto.subCategoria" [typeahead]="nombreSubCateg" [value]="producto.subCategoria"
+                name="editSubCategoria" placeholder="subCategoria" id="editSubCategoria" *ngIf="producto.editar" (keyup)="eventoGuardaEdicion($event, popMod, i)">
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra / Modifica nombre-->
+              <div *ngIf="!producto.editar">{{producto.nombre}}</div>
+              <input type="text" class="form-control" [(ngModel)]="producto.nombre" [value]="producto.nombre" name="editNombre" placeholder="nombre..."
+                id="editNombre" *ngIf="producto.editar" (keyup)="eventoGuardaEdicion($event, popMod, i)">
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra / Modifica precio-->
+              <div *ngIf="!producto.editar">{{producto.precio}}</div>
+              <input type="number" class="form-control" [(ngModel)]="producto.precio" [value]="producto.precio" name="editPrecio" placeholder="xxx.xxx"
+                id="editPrecio" *ngIf="producto.editar" (keyup)="eventoGuardaEdicion($event, popMod, i)">
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra  Gustos-->
+              <div *ngIf="!producto.editar">
+                <div style="text-align: center">
+                  <span class="badge badge-primary" *ngIf="producto.numGustos > 0"> {{producto.numGustos}} </span>
+                </div>
+                <div style="text-align: center">
+                  <span class="badge badge-danger" *ngIf="producto.numGustos == 0"> NO </span>
+                </div>
+              </div>
+              <!-- Modifica los gustos-->
+              <div *ngIf="producto.editar">
+                <div style="text-align: center" *ngIf="numGustos>0">
+                  <span class="badge badge-primary">{{numGustos}}</span>
+                </div>
+                <input type="text" class="form-control" id="gustos" name="gustos" placeholder="ENTER" (keydown)="eventGustos($event, modal, producto.categoria, producto.idAnterior)">
+              </div>
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra / Modifica Comanda-->
+              <div *ngIf="!producto.editar">{{producto.comanda}}</div>
+              <div *ngIf="producto.editar">
+                <!-- lista Comanda -->
+                <select id="comanda" name="comanda" class="form-control" [(ngModel)]="producto.idComanda">
+                  <option *ngFor="let comanda of comandas" [value]="comanda.id">
+                    {{comanda.nombre}}
+                  </option>
+                </select>
+              </div>
+            </td>
+            <td (dblclick)="eventoHabilitaEditar(i, producto.editar)">
+              <!-- Muestra el color-->
+              <span tooltip="Por favor ingrese minimo 6 caracteres" triggers="" #popMod="bs-tooltip" *ngIf="!producto.editar">
+                <input [(colorPicker)]="producto.color" [style.background]="producto.color" disabled class="form-control" [value]="producto.color"
+                />
+              </span>
+              <!-- Modifica el color-->
+              <span tooltip="Por favor ingrese minimo 6 caracteres" triggers="" #popMod="bs-tooltip" *ngIf="producto.editar">
+                <input [(colorPicker)]="producto.color" [style.background]="producto.color" [cpPosition]="('bottom')" class="form-control"
+                  [value]="producto.color" (keyup)="eventoGuardaEdicion($event, popMod, i)" />
+              </span>
+            </td>
+            <td>
+              <!-- Activa/desactiva el producto-->
+              <label class="switch switch-icon switch-pill switch-danger">
+                <input type="checkbox" class="switch-input" [(ngModel)]="producto.activo" (click)="eventEstadoProducto(i)">
+                <span class="switch-label" data-on="&#xf00c;" data-off="&#xf00d;"></span>
+                <span class="switch-handle"></span>
+              </label>
+            </td>
+
+          </tr>
+
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+
+  <modal-gustos #modal> </modal-gustos>
+</div>

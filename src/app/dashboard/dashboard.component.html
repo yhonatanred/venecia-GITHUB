@@ -1,0 +1,249 @@
+<br>
+<br>
+<br>
+<div class="container-fluid" *ngIf="roles.rol == 'administrador'">
+  <div class="row justify-content-center">
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <a [routerLink]="['/usuarios/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-people bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">{{usuarios}}</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Usuarios</div>
+          </div>
+        </div>
+      </a>
+    </div>
+
+    <!--/.col-->
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <a [routerLink]="['/clientes/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-user-follow bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">{{clientes}}</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Clientes</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <a [routerLink]="['/productos', '']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="fa fa-shopping-basket bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">{{productos}}</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Productos</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <a [routerLink]="['/pedidos',-1]">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="fa fa-pinterest-p bg-warning p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-warning mb-0 pt-3">*</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Pedidos</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <!--/.columna para las propinas-->
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <div class="card" (click)="verPropinas(propinas)">
+        <div class="card-body p-0 clearfix">
+          <i class="fa fa-vimeo bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+          <div class="h5 text-primary mb-0 pt-3">$$$</div>
+          <div class="text-muted text-uppercase font-weight-bold font-xs">Propinas</div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <div class="card" (click)="verAuditoria(auditoria)">
+        <div class="card-body p-0 clearfix">
+          <i class="fa fa-cogs bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+          <div class="h5 text-primary mb-0 pt-3">**</div>
+          <div class="text-muted text-uppercase font-weight-bold font-xs">Auditoria</div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <a [routerLink]="['/mesas/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-people bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">**</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Mesas</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-3 col-md-5 col-lg-3 col-xl-3">
+      <div class="card" (click)="cerrarCaja(cierreCaja)">
+        <div class="card-body p-0 clearfix">
+          <i class="fa fa-skyatlas bg-danger p-4 px-5 font-2xl mr-3 float-left"></i>
+          <div class="h5 text-danger mb-0 pt-3">***</div>
+          <div class="text-muted text-uppercase font-weight-bold font-xs">Cerrar Caja</div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-3 col-md-1 col-lg-3 col-xl-3"></div>
+    <!--/.row-->
+  </div>
+</div>
+
+<div class="container-fluid" *ngIf="roles.rol == 'cajero'">
+  <div class="row justify-content-center">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <a [routerLink]="['/clientes/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-user-follow bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">{{clientes}}</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Clientes</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <!--/.col-->
+    <div class="col-4">
+      <a [routerLink]="['/mesas/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-people bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">**</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Mesas</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <div class="col-4">
+      <a [routerLink]="['/pedidos',-1]">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="fa fa-pinterest-p bg-warning p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-warning mb-0 pt-3">*</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Pedidos</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <!--/.columna para las propinas-->
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <div class="col-4">
+      <div class="card" (click)="verPropinas(propinas)">
+        <div class="card-body p-0 clearfix">
+          <i class="fa fa-vimeo bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+          <div class="h5 text-primary mb-0 pt-3">$$$</div>
+          <div class="text-muted text-uppercase font-weight-bold font-xs">Propinas</div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <div class="col-4">
+      <div class="card" (click)="cerrarCaja(cierreCaja)">
+        <div class="card-body p-0 clearfix">
+          <i class="fa fa-skyatlas bg-danger p-4 px-5 font-2xl mr-3 float-left"></i>
+          <div class="h5 text-danger mb-0 pt-3">***</div>
+          <div class="text-muted text-uppercase font-weight-bold font-xs">Cerrar Caja</div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-4"></div>
+    <!--/.row-->
+  </div>
+</div>
+
+<div class="container-fluid" *ngIf="roles.rol == 'mesero'">
+  <div class="row justify-content-center">
+    <div class="col-4"></div>
+    <div class="col-4">
+      <a [routerLink]="['/pedidos',-1]">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="fa fa-pinterest-p bg-warning p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-warning mb-0 pt-3">*</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Pedidos</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <!--/.col-->
+    <div class="col-4">
+      <a [routerLink]="['/mesas/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-people bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">**</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Mesas</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <div class="col-4">
+      <a [routerLink]="['/clientes/inicio']">
+        <div class="card">
+          <div class="card-body p-0 clearfix">
+            <i class="icon-user-follow bg-primary p-4 px-5 font-2xl mr-3 float-left"></i>
+            <div class="h5 text-primary mb-0 pt-3">{{clientes}}</div>
+            <div class="text-muted text-uppercase font-weight-bold font-xs">Clientes</div>
+          </div>
+        </div>
+      </a>
+    </div>
+    <!--/.col-->
+    <!--/.columna para las propinas-->
+    <div class="col-4"></div>
+    <div class="col-4"></div>
+    <div class="col-4">
+      <div class="card" (click)="cerrarCaja(cierreCaja)">
+        <div class="card-body p-0 clearfix">
+          <i class="fa fa-skyatlas bg-danger p-4 px-5 font-2xl mr-3 float-left"></i>
+          <div class="h5 text-danger mb-0 pt-3">***</div>
+          <div class="text-muted text-uppercase font-weight-bold font-xs">Cerrar Caja</div>
+        </div>
+      </div>
+    </div>
+    <!--/.col-->
+    <div class="col-4"></div>
+    <!--/.row-->
+  </div>
+</div>
+<!-------- MODAL PARA MOSTRAR LAS PROPINAS --------- -->
+<propinas #propinas></propinas>
+
+<!-------- MODAL PARA MOSTRAR LA AUDITORIA -------- -->
+<auditoria #auditoria></auditoria>
+
+<!-------- MODAL PARA HACER EL CIERRE DE CAJA ------ -->
+<cierre-de-caja #cierreCaja></cierre-de-caja>

@@ -1,0 +1,29 @@
+import { FormsModule } from '@angular/forms';
+
+
+para crear la estructura de un componente: ng generate component nombreComponente
+--->>>> se añadió a la carpeta 'shared' un filterPipe y un boldPipe
+
+
+------------------Configuracion de FRAMEWORK FRONTEND --------------------------
+instalar el bootstrap ngx-bootstrap --->  npm install ngx-bootstrap --save
+instalar componente ng2-charts ---> npm install ng2-charts --save
+instalar chart.js ---> npm install chart.js --save
+
+------nuevo --
+Se instaló color-Picker --> link: https://www.npmjs.com/package/ngx-color-picker
+Instalacion de colorPicker --> npm install ngx-color-picker --save
+Luego se importa en el modulo a utilizar --> import { ColorPickerModule } from 'ngx-color-picker';
+
+
+-----------------NOTAS------------------------
+con punto y coma(;) se separa los metodos para llamar varios en un boton (ejemplo: (click)="evento1(); evento2()")
+manejador de eventos de un select --> (change)="metodo()"
+
+SELECT * FROM Productos WHERE nombreP LIKE '%n%' OR idSubCategoria = (SELECT idSubCategoria FROM SubCategorias WHERE nombreSC = '%l%');
+
+
+-------------------------18-05-2018--------------------------------------------
+*Se modifica el archivo factura_caja.php para sumarle el 10% del valor total de la cuenta al reporte
+cuando se imprime en modo 'cuenta'
+*se agrega en el archivo facturar_caja.php una linea para sumar la propina al momento de pagar

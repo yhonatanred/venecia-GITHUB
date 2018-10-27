@@ -1,0 +1,28 @@
+<div class="scrollTabla">
+        <table class="table table-bordered table-striped table-sm" >
+                <!-- CABECERA-->
+                <thead>
+                    <tr>
+                        <th>No.Factura</th>
+                        <th>Fecha</th>
+                        <th>Cliente</th>
+                        <th>Telefono</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <!-- CUERPO-->
+                <tbody>        
+                <tr *ngFor="let fact of facturas" (dblclick)="buscarFact_X_num(fact.numFactura)" class="selector">
+                    <td>{{fact.numFactura}}</td>
+                    <td>{{fact.fecha}}</td>
+                    <td>{{fact.cliente}}</td>
+                    <td>{{fact.telefono}}</td>
+                    <td>{{fact.total}}</td>    
+                </tr>    
+                
+                </tbody>
+                    
+            
+            
+            </table>
+</div>

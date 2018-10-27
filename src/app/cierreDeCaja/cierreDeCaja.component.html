@@ -1,0 +1,40 @@
+  <!---------------------------------------------------------------
+     MODAL DE CONFIRMACION PARA EL CIERRE DE CAJA
+    ---------------------------------------------------------------- -->
+    <div bsModal #confirmarModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+        
+         <div class="modal-dialog modal-sm modal-danger" role="document">
+         <div class="modal-content">      
+           <div class="modal-header">
+             <!-- Titulo -->
+             <h3 class="modal-title">Confirmar</h3>
+           </div>
+           <div class="modal-body"><!--Cuerpo del modal --> 
+            <h5 style="text-align:center;">¿Esta seguro de hacer el cierre de caja?</h5>
+           </div><!--Aqui termina el cuerpo -->
+           <div class="modal-footer">
+             <button type="button" class="btn btn-danger" (click)="hideModal()">No</button>
+             <button type="button" class="btn btn-primary" (click)="verificarMesas_cerradas(mensajeModal)">Si</button>
+           </div>
+         </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->
+
+    <!---------------------------------------------------------------
+     MODAL QUE MUESTRA EL MENSAJE DE LA ZETA GENERADA
+    ---------------------------------------------------------------- -->
+    <div bsModal #mensajeModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+        
+         <div class="modal-dialog modal-sm modal-warning" role="document">
+         <div class="modal-content">      
+           <div class="modal-header">
+           </div>
+           <div class="modal-body"><!--Cuerpo del modal --> 
+            <h5 style="text-align:center;">{{mensaje}}</h5>
+           </div><!--Aqui termina el cuerpo -->
+           <div class="modal-footer">
+             <button type="button" class="btn btn-warning" (click)="mensajeModal.hide()">Aceptar</button>
+           </div>
+         </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->

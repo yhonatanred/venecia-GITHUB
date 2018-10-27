@@ -1,0 +1,98 @@
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" (click)="mostrarModal(modalNuevoUsuario)">
+  <i class="fa fa-user"></i>&nbsp; {{nuevoUsuario}}
+</button>
+
+
+<div bsModal #modalNuevoUsuario="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{nuevoUsuario}}</h4>
+        <button type="button" class="close" (click)="modalNuevoUsuario.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #formUsuario="ngForm" id="form-Usuario">
+
+          <alert type="danger" *ngIf="mostrarAlert" dismissOnTimeout='2000'>
+            <strong>Alerta!</strong> Nombre de USUARIO ya registrado.
+          </alert>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Nombre</span>
+              <input class="form-control" [(ngModel)]="u.nombre" name="nombre" #nombre="ngModel" required>
+              <span class="input-group-addon" *ngIf="nombre.valid">
+                <i class="fa fa-check text-success"></i>
+              </span>
+              <span class="input-group-addon" *ngIf="nombre.invalid">
+                <i class="fa fa-ban text-danger" *ngIf="nombre.errors.required"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Apellido</span>
+              <input class="form-control" [(ngModel)]="u.apellido" name="apellido" #apellido="ngModel" required>
+              <span class="input-group-addon" *ngIf="apellido.valid">
+                <i class="fa fa-check text-success"></i>
+              </span>
+              <span class="input-group-addon" *ngIf="apellido.invalid">
+                <i class="fa fa-ban text-danger" *ngIf="apellido.errors.required"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Usuario</span>
+              <input class="form-control" [(ngModel)]="u.user" name="usuario" #usuario="ngModel" required>
+              <span class="input-group-addon" *ngIf="usuario.valid">
+                <i class="fa fa-check text-success"></i>
+              </span>
+              <span class="input-group-addon" *ngIf="usuario.invalid">
+                <i class="fa fa-ban text-danger" *ngIf="usuario.errors.required"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Contraseña</span>
+              <input type="password" class="form-control" [(ngModel)]="u.pass" name="pass" #pass="ngModel" required>
+              <span class="input-group-addon" *ngIf="pass.valid">
+                <i class="fa fa-check text-success"></i>
+              </span>
+              <span class="input-group-addon" *ngIf="pass.invalid">
+                <i class="fa fa-ban text-danger" *ngIf="pass.errors.required"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon" for="rol">Rol</span>
+              <select class="form-control" name="rol" [(ngModel)]="u.rol">
+                <option value="{{administrador}}">{{administrador}}</option>
+                <option value="{{cajero}}">{{cajero}}</option>
+                <option value="{{mesero}}">{{mesero}}</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group" style="align-items:flex-end;">
+            <button type="button" class="btn btn-secondary" (click)="modalNuevoUsuario.hide()">{{cancelar}}</button>
+            <button [disabled]="!formUsuario.form.valid" class="btn btn-primary" (click)="guardarUsuario(modalNuevoUsuario)">{{guardar}}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

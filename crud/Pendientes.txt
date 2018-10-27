@@ -1,0 +1,1 @@
+Validar conexion a base de datos --->> mostrar alerta cuando no exista conexion a la BD

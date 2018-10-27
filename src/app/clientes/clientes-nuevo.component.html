@@ -1,0 +1,111 @@
+<!-- Button trigger modal
+<button type="button" class="btn btn-primary" data-toggle="modal" (click)="mostrarModal(modalNuevoCliente)">
+  <i class="fa fa-user"></i>&nbsp; {{nuevoCliente}}
+</button>
+ -->
+
+<div bsModal #modalNuevoCliente="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{nuevoCliente}}</h4>
+        <button type="button" class="close" (click)="modalNuevoCliente.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #formCliente="ngForm" id="form-Cliente">
+
+          <alert type="danger" *ngIf="mostrarAlert" dismissOnTimeout='2000'>
+            <strong>Alerta!</strong> Telefono ya registrado.
+          </alert>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Telefono</span>
+              <input class="form-control" [(ngModel)]="cliente.telefonoC" name="tel" #tel="ngModel" required minlength="7" maxlength="10"
+                onkeypress="if ( isNaN( String.fromCharCode(event.keyCode) )) return false;" (keydown)="saltar($event)">
+              <span class="input-group-addon" *ngIf="tel.valid">
+                <i class="fa fa-check text-success"></i>
+              </span>
+              <span class="input-group-addon" *ngIf="tel.invalid">
+                <i class="fa fa-ban text-danger" *ngIf="tel.errors.required"></i>
+                <i class="fa fa-ban text-danger" *ngIf="tel.errors.minlength">minimo 7</i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Nombre</span>
+              <input class="form-control" [(ngModel)]="cliente.nombreCompleto" name="nombre">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Direccion</span>
+              <input class="form-control" [(ngModel)]="cliente.direccionC" name="direccion">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Empresa</span>
+              <input class="form-control" [(ngModel)]="cliente.empresa" name="empresa">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="ocultar">
+            <div class="input-group">
+              <span class="input-group-addon">Tel Empresa</span>
+              <input class="form-control" [(ngModel)]="cliente.telefonoEmpresa" name="telEmpresa">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="ocultar">
+            <div class="input-group">
+              <span class="input-group-addon">Cedula</span>
+              <input class="form-control" [(ngModel)]="cliente.cedula" name="cedula">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+
+          <div class="form-group" *ngIf="ocultar">
+            <div class="input-group">
+              <span class="input-group-addon">Ciudad</span>
+              <input class="form-control" [(ngModel)]="cliente.ciudad" name="ciudad">
+              <span class="input-group-addon">
+                <i class="fa fa-id-card-o"></i>
+              </span>
+            </div>
+          </div>
+
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalNuevoCliente.hide()">{{cancelar}}</button>
+        <button [disabled]="!formCliente.form.valid" class="btn btn-primary" (click)="guardarCliente(modalNuevoCliente)">{{guardar}}</button>
+      </div>
+    </div>
+    <!-- /.modal-content -->
+  </div>
+  <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

@@ -1,0 +1,52 @@
+<div bsModal #justificacionModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+        <!-- Si va a crear un nuevo gusto muestra el modal verde-->
+         <div class="modal-dialog modal-md modal-primary" role="document">
+         <div class="modal-content">      
+           <div class="modal-header">         
+           </div>
+           <div class="modal-body"><!--Cuerpo del modal --> 
+            
+            <div class="row">
+                <!-- COLUMNA PARA VER LA INFO BASICA-->
+                <div class="container col-md-6">
+                    <div class="row text-white">
+                        <span class="input-group-addon col-md-5 text-white bg-primary" *ngIf="!descGlobal">Tr: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary" *ngIf="!descGlobal">{{tr}}</span>
+
+                        <span class="input-group-addon col-md-5 text-white bg-primary" >No. Factura: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary" >{{numFactura}}</span>
+
+                        <span class="input-group-addon col-md-5 text-white bg-primary" >Fecha: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary" >{{fecha}}</span>
+
+                        <span class="input-group-addon col-md-5 text-white bg-primary" >Cliente: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary">{{cliente}}</span>
+
+                        <span class="input-group-addon col-md-5 text-white bg-primary">descuento: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary">${{descuento | number: 0}}</span>
+
+                        <span class="input-group-addon col-md-5 text-white bg-primary" *ngIf="!descGlobal">Valor U.: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary" *ngIf="!descGlobal">${{precioP | number:0}}</span>
+
+                        <span class="input-group-addon col-md-5 text-white bg-primary">Total: </span>
+                        <span class="form-control col-md-7 text-white bg-secondary">${{total | number:0}}</span>
+                    </div>
+                </div>
+                <!-- COLUMNA PARA VER LA JUSTIFICACION-->
+                <div class="col-md-6">
+                    <textarea rows="8" cols="28" [(ngModel)]="justificacion" disabled>
+                    </textarea>
+                    <button type="button" class="btn btn-success" (click)="verFactura(facturas)">Ver Factura</button>
+                </div>
+            </div>
+    
+           </div><!--Aqui termina el cuerpo -->
+           <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="hideModal()">Cerrar</button>
+           </div>
+         </div><!-- /.modal-content -->
+       </div><!-- /.modal-dialog -->
+       </div><!-- /.modal -->
+
+<!-- LLAMA A COMPONENTE PARA VISUALIZAR LAS FACTURAS -->
+<facturas #facturas></facturas>

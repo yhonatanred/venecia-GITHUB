@@ -1,0 +1,270 @@
+<div *ngIf="!clientes">
+	Cargando listado de productos...
+</div>
+
+<div class="row" *ngIf="clientes">  
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <div class="container">
+            <h3><i class="fa fa-align-justify"></i> Clientes</h3>
+        </div>
+        <div class="container" >
+            <div style="float:left;">
+                Filtrar por nombre o telefono
+                <div class="input-group">
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                  <input [(ngModel)]="filterNombre" type="text" class="form-control" placeholder="nombre">
+                  <input [(ngModel)]="filterNumero" type="text" class="form-control" placeholder="telefono">
+                </div>
+            </div>
+            <div style="float:right;">
+                <br>
+                <button type="button" class="btn btn-primary" data-toggle="modal" (click)="mostrarModal(modal)">
+                  <i class="fa fa-user"></i>&nbsp; Nuevo Cliente
+                </button>
+            </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="table-responsive">
+        <table
+        class="table table-striped" 
+        [mfData]="clientes | clienteFiltroNombre : filterNombre | clienteFiltroNumero : filterNumero" 
+        #mf="mfDataTable" 
+        [mfRowsOnPage]="rowsOnPage"
+        [(mfSortBy)]="sortBy"
+        [(mfSortOrder)]="sortOrder"
+        >
+          <thead>
+            <tr>
+              <th >
+                  <mfDefaultSorter by="nombreCompleto">Nombre</mfDefaultSorter>
+              </th>
+              <th >
+                  <mfDefaultSorter by="telefonoC">Telefono</mfDefaultSorter>
+              </th>
+              <th>
+                  <mfDefaultSorter by="direccionC">Direccion</mfDefaultSorter>
+              </th>
+              <th ></th>
+              <th ></th>
+              <th ></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let cliente of mf.data">
+              <td>{{cliente.nombreCompleto}}</td>
+              <td >{{cliente.telefonoC}}</td>
+              <td>{{cliente.direccionC}}</td>
+              <td>
+                <button type="button" class="btn btn-primary" (click)="clientesDetalles(cliente, modalVerEditar)" ><i class="fa fa-eye" ></i>&nbsp; ver    </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-warning" (click)="clientesEditar(cliente, modalVerEditar)"><i class="fa fa-edit"></i>&nbsp; modificar</button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger"(click)="confirmaEliminar(cliente.idCliente, modalEliminar)"><i class="fa fa-eraser"></i>&nbsp; eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+          <tfoot>
+              <tr>
+                <td colspan="4">
+                  <mfBootstrapPaginator [rowsOnPageSet]="[5,10,25]" ></mfBootstrapPaginator>
+                </td>
+              </tr>
+          </tfoot>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!--/.col-->
+</div>
+<!--/.row-->
+
+
+
+<div  bsModal #modalVerEditar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-primary" role="document" *ngIf="opcion=='ver'">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{titulo}}</h4>
+        <button type="button" class="close" (click)="cancelar(modalVerEditar)" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon">Nombre</span>
+            <input class="form-control" [(ngModel)]="clienteVerEditar.nombreCompleto" name="nombre" disabled>
+            <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+          </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Telefono</span>
+              <input class="form-control"  [(ngModel)]="clienteVerEditar.telefonoC" name="telefono" disabled>
+              <span class="input-group-addon"><i class="fa fa-key"></i></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Direccion</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.direccionC" name="direccion" disabled>
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+        </div>
+      
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Empresa</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.empresa" name="empresa" disabled>
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Tel Empresa</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.telefonoEmpresa" name="telEmpresa" disabled>
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Cedula</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.cedula" name="cedula" disabled>
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Ciudad</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.ciudad" name="ciudad" disabled>
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-warning" (click)="clientesEditar(clienteVerEditar, modalVerEditar)">{{nombreBoton}}</button>
+        <button type="button" class="btn btn-primary" (click)="cancelar(modalVerEditar)">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  
+  <div class="modal-dialog modal-warning" role="document" *ngIf="opcion=='modificar'">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">{{titulo}}</h4>
+        <button type="button" class="close" (click)="cancelar(modalVerEditar)" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form #formCliente="ngForm" id="form-Cliente">    
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Nombre</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.nombreCompleto" name="nombre">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Telefono</span>
+              <input class="form-control"  [(ngModel)]="clienteVerEditar.telefonoC" name="telefono" #pass="ngModel"  required minlength="7" maxlength="10">
+              <span class="input-group-addon"><i class="fa fa-key"></i></span>
+            </div>
+            <div *ngIf="pass.invalid && (pass.dirty || pass.touched)" class="alert alert-danger">
+              <div *ngIf="pass.errors.required">
+                Contraseña obligatoria.
+              </div>
+              <div *ngIf="pass.errors.minlength">
+                No es un numero valido
+              </div>
+              <div *ngIf="pass.errors.maxlength">
+                No es un numero valido
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Direccion</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.direccionC" name="direccion">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+          </div>
+        
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Empresa</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.empresa" name="empresa">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Tel Empresa</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.telefonoEmpresa" name="telEmpresa">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Cedula</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.cedula" name="cedula">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <div class="input-group">
+              <span class="input-group-addon">Ciudad</span>
+              <input class="form-control" [(ngModel)]="clienteVerEditar.ciudad" name="ciudad">
+              <span class="input-group-addon"><i class="fa fa-id-card-o"></i></span>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancelar(modalVerEditar)">Cancelar</button>
+        <button [disabled]="!formCliente.form.valid" type="button" class="btn btn-warning" (click)="guardarCliente(modalVerEditar)" >{{nombreBoton}}</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+<div  bsModal #modalEliminar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-danger" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title">Confirmar</h4>
+        <button type="button" class="close" (click)="modalEliminar.hide()" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+          <label type="text" id="elimiar"  name="eliminar">Desea eliminar este Cliente</label>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="modalEliminar.hide()">No</button>
+        <button type="button" class="btn btn-danger" (click)="clientesEliminar(modalEliminar)">Si</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+
+
+<clientes-nuevo #modal [telefonoC]="telefono"></clientes-nuevo>

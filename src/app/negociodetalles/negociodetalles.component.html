@@ -1,0 +1,93 @@
+<div class="container-fluid">
+  <br>
+  <div class="row" *ngIf="datos">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header">
+          <div class="container">
+            <h3>
+              <i class="fa fa-align-justify"></i> Datos de resolucion
+            </h3>
+            <alert type="success" *ngIf="mostrarAlert" dismissOnTimeout='2000'>
+              <strong>Alerta!</strong> Registros actualizados.
+            </alert>
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="container-fluid">
+
+              <div class="row">
+                  <div class="col-md-4"></div>
+                  <img class="col-md-4" src="http://localhost/appVeneccia/src/img/fondo.png" alt="Third slide" height="150">
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4"></div>
+                  <div class="col-md-4"></div>
+                <div class="col-md-12">&nbsp;</div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Resolucion</span>
+                    <input type="text" class="form-control" [(ngModel)]="datos.resolucion" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Nombre</span>
+                    <input class="form-control" [(ngModel)]="datos.nombre" disabled> 
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Desde</span>
+                    <input class="form-control" [(ngModel)]="datos.desde" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">SubNombre</span>
+                    <input class="form-control" [(ngModel)]="datos.subnombre" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Hasta</span>
+                    <input class="form-control" [(ngModel)]="datos.hasta" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Nit</span>
+                    <input class="form-control" [(ngModel)]="datos.nit" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Regimen</span>
+                    <input class="form-control" [(ngModel)]="datos.regimen" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Direccion</span>
+                    <input class="form-control" [(ngModel)]="datos.direccion" disabled>
+                  </div>
+                </div>
+                <div class="form-group col-md-6">
+                  <div class="input-group">
+                    <span class="input-group-addon">Mensaje</span>
+                    <input class="form-control" [(ngModel)]="datos.mensaje" disabled>
+                  </div>
+                </div>
+                <div class="  col-md-6"></div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+
+
+
+    </div>
+    <!--/.col-->
+  </div>
+  <!--/.row-->
+</div>

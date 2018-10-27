@@ -1,0 +1,236 @@
+<div class="container-fluid prueba" style="
+height: 100%;
+position: absolute;
+left: 0px;
+top: 0px;">
+
+    <br>
+    <div class="row parte1">
+        <div class="col-md-12 col-lg-3 col-xl-3 letraTabla d-md-down-none">
+            <div id="global">
+                <table class="table border">
+                    <tbody>
+                        <tr *ngFor="let product of productos; let i=index" (click)="seleccion(product.idProducto, i)" [id]="i">
+                            <td style="display:none;">
+                                <input type="checkbox" [id]="'check'+i" [name]="i">
+                            </td>
+                            <!-- Muestra el nombre del producto sin editar-->
+                            <td class="col-md-8 col-lg-8 col-xl-8" *ngIf="!product.editar" (dblclick)="eventEditar(i)"> {{product.nombreP | lowercase}}</td>
+                            <!-- Muestra un input para editar el producto-->
+                            <td class="col-md-8 col-lg-8 col-xl-8" *ngIf="product.editar">
+                                <input class="form-control" [(ngModel)]="product.nombreP" (keypress)="eventInputEditar($event, i)" autofocus>
+                            </td>
+                            <td class="col-md-2 col-lg-2 col-xl-2" (dblclick)="eventEditar(i)">${{calcularValorProducto(producto.precioP, producto.cantidad) | number:0}}</td>
+                            <td class="col-md-2 col-lg-2 col-xl-2" (dblclick)="eventEditar(i)">&nbsp;</td>
+                            <td class="col-md-2 col-lg-2 col-xl-2" (dblclick)="eventEditar(i)">{{product.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="col-md-12 col-lg-9 col-xl-9">
+            <carta-home #carta [cantidad]="cantidad"></carta-home>
+        </div>
+    </div>
+    <div class="row parte2">
+        <div class="col-md-6 letraTabla d-lg-none d-xl-none">
+            <div id="global">
+                <table class="table border">
+                    <tbody>
+                        <tr *ngFor="let product of productos; let i=index" (click)="seleccion(product.idProducto, i)" [id]="i">
+                            <td style="display:none;">
+                                <input type="checkbox" [id]="'check'+i" [name]="i">
+                            </td>
+                            <!-- Muestra el nombre del producto sin editar-->
+                            <td class="col-md-8 col-lg-8 col-xl-8" *ngIf="!product.editar" (dblclick)="eventEditar(i)"> {{product.nombreP | lowercase}} </td>
+                            <!-- Muestra un input para editar el producto-->
+                            <td class="col-md-8 col-lg-8 col-xl-8" *ngIf="product.editar">
+                                <input class="form-control" [(ngModel)]="product.nombreP" (keypress)="eventInputEditar($event, i)" autofocus>
+                            </td>
+                            <td class="col-md-2 col-lg-2 col-xl-2" (dblclick)="eventEditar(i)">${{product.precioP | number:0}}</td>
+                            <td class="col-md-2 col-lg-2 col-xl-2" (dblclick)="eventEditar(i)">&nbsp;</td>
+                            <td class="col-md-2 col-lg-2 col-xl-2" (dblclick)="eventEditar(i)">{{product.cantidad}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col-md-6 d-lg-none d-xl-none">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="container">
+                        <div class="row">
+                            <span class="input-group-addon col-md-5  col-lg-5 col-xl-5 text-white bg-success">Cantidad</span>
+                            <input name="cant" type="number" class="form-control col-md-7 text-right" [(ngModel)]="cantidad">
+                            <button class="btn btn-primary col-md-4  col-lg-4 col-xl-4" (click)="eventCantidad(1)">1</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(2)">2</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(3)">3</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(4)">4</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(5)">5</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(6)">6</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(7)">7</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(8)">8</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(9)">9</button>
+                            <button class="btn btn-warning col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(0.5)">1/2</button>
+                            <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(0)">0</button>
+                            <button class="btn btn-danger col-md-4 col-lg-4 col-xl-4" (click)="reiniciar()">Borrar</button>
+                        </div>
+                    </div>
+                    <!--Aqui termina el cuerpo -->
+                    <br>
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body p-0 clearfix">
+                            <div class="text-primary ">
+                                <div class="row">
+                                    <div class="col">
+                                        <br>
+                                        <br>
+                                        <h4>
+                                            <b>Subtotal:</b>
+                                        </h4>
+                                    </div>
+                                    <div class="col" style="text-align:right;">
+                                        <br>
+                                        <br>
+                                        <div class="text-muted text-uppercase font-weight-bold font-xs">
+                                            <h3>$ {{redondea(pedido.subTotal) | number:0}}</h3>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        {{cantidadArt()}} Articulos
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-5">
+                    <br>
+                    <br>
+                    <div class="container">
+                        <div class="col-md-12">
+                            <input type="button" class="boton" value="Borrar" (click)="eventBorrar()">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2"></div>
+                <div class="col-md-4">
+                    <br>
+                    <!-- [routerLink]="['/pedidos', pedido.mesa]"-->
+                    <button type="button" class="btn btn-warning btn-circle btn-xl" routerLinkActive="active" [routerLink]="['/pedidos', pedido.mesa]"
+                        (click)="enviar()">
+                        <i class="fa fa-check fa-3x"></i>
+                        <br>Enviar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-xl-3 d-md-down-none">
+            <div class="container">
+                <div class="row">
+                    <span class="input-group-addon col-md-5  col-lg-5 col-xl-5 text-white bg-success">Cantidad</span>
+                    <input name="cant" type="number" class="form-control col-md-7 text-right" [(ngModel)]="cantidad">
+                    <button class="btn btn-primary col-md-4  col-lg-4 col-xl-4" (click)="eventCantidad(1)">1</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(2)">2</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(3)">3</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(4)">4</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(5)">5</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(6)">6</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(7)">7</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(8)">8</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(9)">9</button>
+                    <button class="btn btn-warning col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(0.5)">1/2</button>
+                    <button class="btn btn-primary col-md-4 col-lg-4 col-xl-4" (click)="eventCantidad(0)">0</button>
+                    <button class="btn btn-danger col-md-4 col-lg-4 col-xl-4" (click)="reiniciar()">Borrar</button>
+                </div>
+            </div>
+            <!--Aqui termina el cuerpo -->
+        </div>
+        <div class="col-lg-2 col-xl-2 d-md-down-none">
+            <div class="container">
+                <div class="col-md-12 col-lg-12 col-xl-12">
+                    <input type="button" class="boton" value="Borrar" (click)="eventBorrar()">
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-5 col-xl-5 d-md-down-none">
+            <div class="card">
+                <div class="card-body p-0 clearfix">
+                    <i class="fa bg-primary p-4 px-5 font-2xl mr-3 float-left d-md-down-none">
+                        <h5>
+                            <b>Mesa</b>
+                        </h5>
+                        <h1 style="text-align: center;">{{pedido.mesa}}</h1>
+                    </i>
+                    <div class="text-primary ">
+                        <div class="row">
+                            <div class="col-12" style="text-align:right;">
+                                <br>
+                                <h3>
+                                    <b>Subtotal</b>
+                                </h3>
+                            </div>
+                            <div class="col" style="text-align:center;">
+                                <div class="text-muted text-uppercase font-weight-bold font-xs">
+                                    <h2>$ {{redondea(pedido.subTotal) | number:0}}</h2>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                {{cantidadArt()}} Articulos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-1 col-xl-1 d-md-down-none">
+            <br>
+            <!-- [routerLink]="['/pedidos', pedido.mesa]"-->
+            <button type="button" class="btn btn-warning btn-circle btn-xl" routerLinkActive="active" [routerLink]="['/pedidos', pedido.mesa]"
+                (click)="enviar()">
+                <i class="fa fa-check fa-3x"></i>
+                <br>Enviar
+            </button>
+        </div>
+        <div class="col-lg-1 col-xl-1 d-md-down-none"></div>
+
+    </div>
+</div>
+
+<!-- MODAL GUSTOS-->
+<modal-gustos #modal> </modal-gustos>
+
+
+
+<!--  MODAL PARA MODIFICAR UN PRODUCTO-->
+
+<div bsModal #modalEditar="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+    [config]="{backdrop: 'static'}">
+    <div class="modal-dialog modal-sm modal-primary" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1>Editar</h1>
+            </div>
+            <div class="modal-body">
+                <!--Cuerpo del modal -->
+                <input type="class" [(ngModel)]="editarProduct" class="form-control">
+            </div>
+            <!--Aqui termina el cuerpo -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" (click)="modalEditar.hide()">Cerrar</button>
+                <button type="button" class="btn btn-primary">Aceptar</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->

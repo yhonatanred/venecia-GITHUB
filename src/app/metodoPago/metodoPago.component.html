@@ -1,0 +1,90 @@
+  <!--  MODAL DE AUDITORIA CUANDO SE CAMBIA EL PRECIO DE UN PRODUCTO-->
+
+ <div bsModal #modalMetodoPago="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+  <div class="modal-dialog modal-md modal-success" role="document">
+    <div class="modal-content">      
+      <div class="modal-header" *ngIf="this.cobrarPropina()">
+        <h4>Facturar, mesa: {{mesa}}</h4>
+        <label for="propina">Propina $: </label>
+        <input type="number" name="propina" id="propina" class="propina" [(ngModel)]="propina" (keypress)="eventPropina($event)" (click)="fp=true">
+        {{focusPropina()}}
+      </div>
+      <div class="modal-header" *ngIf="!this.cobrarPropina()">
+        <h4>Facturar, mesa: {{mesa}}</h4>
+        {{focusMetodoP()}}
+      </div>
+      <div class="modal-body"><!--Cuerpo del modal -->         
+        <label for="metodoP"><h5>Metodo de pago: </h5></label>
+        <input type="text" id="metodoP" name="metodoP" [(ngModel)]="metodoP"
+        (keypress)="eventMetodoP($event, metodoP)" [typeahead]="metodos_nombres" (click)="fm=true" (ngModelChange)="initVal2()">
+        <br>
+        <!-- INPUT PARA EFECTIVO-->
+        <div *ngFor="let metodo of metodos_pagos">
+        <div class="form-group row"  *ngIf="metodoP.toUpperCase() == metodo.metodoP.toUpperCase()">
+             <div class="col-md-12">
+                <div class="input-group">
+                    <span class="input-group-addon" *ngIf="!mixto(metodo.metodoP) && !efectivo(metodo.metodoP)"><h5>{{metodo.metodoP}}</h5></span>
+                    <span class="input-group-addon" *ngIf="efectivo(metodo.metodoP)"><h5>Entraga</h5></span>
+                    <!-- efectivo-->
+                    <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" (keypress)="eventValor($event, modalDevuelta)"
+                    class="form-control" *ngIf="efectivo(metodo.metodoP)" [(ngModel)]="valor1">
+                    <!-- credito-->
+                    <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" (keypress)="eventValor($event, modalDevuelta)"
+                    class="form-control" *ngIf="credito(metodo.metodoP)" [(ngModel)]="valor1" readonly="readonly">
+                    <!-- tarjeta-->
+                    <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" (keypress)="eventValor($event, modalDevuelta)"
+                    class="form-control" *ngIf="tarjeta(metodo.metodoP)" [(ngModel)]="valor1" readonly="readonly">
+                    <!-- Input adicional en caso de ser mixto-->
+                    <span class="input-group-addon" *ngIf="mixto(metodo.metodoP)"><h5>Tarjeta</h5></span>
+                        <input type="number" [id]="metodo.metodoP" [name]="metodo.metodoP" class="form-control" 
+                        (keypress)="eventMixto($event)"  *ngIf="mixto(metodo.metodoP)" [(ngModel)]="valor1">
+                </div>
+              </div> 
+        </div>
+            <!-- INPUT ADICIONAL PARA UN PAGO MIXTO-->
+        <div class="form-group row"  *ngIf="(metodoP.toUpperCase() == metodo.metodoP.toUpperCase()) && mixto(metodo.metodoP)">
+             <div class="col-md-12">
+                <div class="input-group">
+                  <span class="input-group-addon"><h5>Efectivo</h5></span>
+                  <input type="number" id="efectivoMixto"  [name]="metodo.metodoP"  (keypress)="eventValor($event, modalDevuelta)" 
+                  class="form-control" [(ngModel)]="valor2">
+                </div>
+              </div> 
+        </div>
+        </div>
+        <h4>Total a pagar:</h4><div class="total">$ {{calcularTotal() | number:0}}</div>
+        
+      </div><!--Aqui termina el cuerpo -->
+        <alert type="danger" *ngIf="verAlerta">
+          <strong>{{mensajeAlerta}}</strong>
+        </alert>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secundary" (click)="hideModal()">Cerrar</button>
+        <button type="button" class="btn btn-success" (click)="eventBtnAceptar(modalDevuelta)">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+  <!----------------------------------------------
+  ---MODAL PARA MOSTRAR LA DEVUELTA
+------------------------------------------- -->
+
+<div bsModal #modalDevuelta="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+    <div class="modal-dialog modal-md modal-success" role="document">
+      <div class="modal-content">      
+        <div class="modal-header">
+          <h1>Devuelta</h1>
+        </div>
+        <div class="modal-body"><!--Cuerpo del modal -->         
+           <div class="total">$ {{this.cambio | number:0}} </div>
+        </div><!--Aqui termina el cuerpo -->
+        <div class="modal-footer"> <!-- modalDevuelta.hide()-->  
+          {{focusDevuelta()}}
+          <button type="button" class="btn btn-secundary" (click)="imprimirFactura()">Imprimir factura</button>        
+          <button type="button" class="btn btn-success" id="cerrarD" (click)="eventCerrarDevuelta(modalDevuelta)">Cerrar</button>
+        </div>
+      </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->

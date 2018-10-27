@@ -1,0 +1,112 @@
+ <!-- ------ MODAL PARA MOSTRAR LOS GUSTOS -------- -->
+  <div bsModal #gustosModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+   <div class="modal-dialog modal-primary modal-sm" role="document">
+    <div class="modal-content">      
+      <div class="modal-header">
+        <h4 class="modal-title">Gustos</h4>
+      </div>
+      <div class="modal-body tablaGustos" id="contenedorTabla"><!--Cuerpo del modal --> 
+        <div class="input-group" *ngIf="idProducto == -1"> 
+            <span class="input-group-addon" for="rol">Vistas</span>
+            <select id="categoria" name="categoria" class="form-control" [(ngModel)]="vista" (change)="eventChangeCateg()">
+              <option [value]="-2">Configurar</option>
+              <option [value]="-1">Todo</option>
+              <option [value]="idCateg">
+                {{nombCateg}}
+              </option>
+            </select>
+            <button type="button" class="btn btn-success" (click)="showModalnGusto(nuevoModal)">
+              <i class="fa fa-plus-square fa-lg"></i> Nuevo</button>
+         </div>  
+          <table class="table table-sm">
+            <thead>
+              <tr>
+                <th *ngIf="vista == -2">Gusto</th>
+                <th *ngIf="vista == -2"><span><i class="fa fa-pencil fa-lg"></i></span></th>
+                <th *ngIf="vista == -2"><span><i class="fa fa-trash-o fa-lg"></i></span></th>
+              </tr>              
+            </thead>
+            <tbody id="bodyGustos">
+              <tr *ngFor="let gusto of gustosSeleccion; let i = index">
+                <td>
+                  <label [for]="gusto.gustos.id" class="letraGusto contenido">
+                    <input type="checkbox" [id]="gusto.gustos.id" [name]="gusto.gustos.id" [(ngModel)]="gustosSeleccion[i].seleccion"><!-- [(ngModel)]="checkGustos[i]"-->
+                     {{gusto.gustos.gusto}}
+                    <span class="checkmark"></span>
+                  </label>
+                </td>
+              <td *ngIf="vista == -2">
+                <button type="button" class="btn btn-warning" (click)="showModalEdit(nuevoModal, gusto.gustos.id, gusto.gustos.gusto)">
+                    <span><i class="fa fa-pencil fa-lg"></i></span>               
+                  </button>                  
+              </td>
+              <td *ngIf="vista == -2">
+                  <button type="button" class="btn btn-danger" (click)="eventEliminarGusto(gusto.gustos.id, gusto.gustos.idCategoria)">
+                    <span><i class="fa fa-trash-o fa-lg"></i></span>
+                  </button>
+              </td>
+              </tr> 
+            </tbody>
+          </table>
+          <!-- Mensaje de validacion-->
+          <alert type="danger" *ngIf="infoInValida">
+          <strong>No ha seleccionado ningun gusto</strong>
+        </alert>
+      </div><!--Aqui termina el cuerpo -->
+      <div class="modal-footer">
+        <!-- <button type="button" class="btn btn-secondary" (click)="hideModal()">Sin gustos</button> -->
+        <button type="button" class="btn btn-primary" (click)="eventGuardaGustos()">Aceptar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+  <!---------------------------------------------------------------
+     MODAL QUE ME CREA/MODIFICA UN GUSTO 
+    ---------------------------------------------------------------- -->
+    <div bsModal #nuevoModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+   <!-- Si va a crear un nuevo gusto muestra el modal verde-->
+    <div class="modal-dialog modal-sm" role="document">
+    <div class="modal-content">      
+      <div class="modal-header">
+        <!-- Titulo para crear un nuevo gusto-->
+        <h4 class="modal-title" *ngIf="!editarGusto">Nuevo gusto</h4>
+        <!-- Titulo para editar un gusto-->
+        <h4 class="modal-title" *ngIf="editarGusto">Editar gusto</h4>
+      </div>
+      <div class="modal-body"><!--Cuerpo del modal --> 
+        <div class="input-group"> 
+            <!-- Icono para crear un gusto-->
+            <span class="input-group-addon" *ngIf="!editarGusto"><i class="fa fa-file-text fa-lg"></i> </span>
+            <!-- Icono para editar un gusto-->
+            <span class="input-group-addon" *ngIf="editarGusto"><i class="fa fa-edit fa-lg"></i> </span> 
+            <!-- Input para crear un gusto-->           
+            <input type="text" id="input3-group1" name="nGusto" placeholder="Nuevo gusto..." [(ngModel)]="nuevoGusto" autofocus (keypress)="eventInputCrearGusto($event, nuevoModal)" *ngIf="!editarGusto">
+            <!-- Input para editar un gusto-->
+            <input type="text" id="editar" name="editarGusto" placeholder="gusto..." [(ngModel)]="nuevoGusto" autofocus  (keypress)="eventInputEditarGusto($event, nuevoModal)" *ngIf="editarGusto">
+            <span class="input-group-btn">
+            <!-- Boton para crear un gusto-->
+            <button type="button" class="btn btn-success" (click)="eventCrearGusto(nuevoModal)" *ngIf="!editarGusto">
+            <i class="fa fa-plus-square fa-lg"></i></button>
+            <!-- Boton para editar un gusto-->
+            <button type="button" class="btn btn-warning" (click)="eventEditarGusto(nuevoModal)" *ngIf="editarGusto">
+            <i class="fa fa-pencil fa-lg"></i></button>
+            </span>       
+      </div>
+        <!-- Mensaje de validacion-->
+            <alert type="danger" *ngIf="alertaCrearG">
+            {{alertnGusto}}
+            </alert>
+      </div><!--Aqui termina el cuerpo -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="hideModalnGusto(nuevoModal)" *ngIf="!editarGusto">Cancelar</button>
+        <button type="button" class="btn btn-secondary" (click)="hideModalEdit(nuevoModal)" *ngIf="editarGusto">Cancelar</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+  </div><!-- /.modal -->
+
+
+
+
+ 

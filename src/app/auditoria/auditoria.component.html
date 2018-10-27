@@ -1,0 +1,109 @@
+<div bsModal #auditoriaModal="bs-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" [config]="{backdrop: 'static'}"> 
+    <!-- Si va a crear un nuevo gusto muestra el modal verde-->
+     <div class="modal-dialog modal-lg modal-warning" role="document">
+     <div class="modal-content">      
+       <div class="modal-header">
+        <div class="container">
+          <h3>Auditoria</h3>
+          <div class="row">
+              <input type="text" class="form-control col-md-5" [bsConfig]="bsConfig" 
+              placeholder="fecha" bsDaterangepicker [(ngModel)]="fecha" />
+              <button type="button" class="btn btn-success" (click)="eventBuscar()">Buscar</button>
+          </div>
+        </div>
+        <div class="form-group">
+          <div class="input-group">
+            <span class="input-group-addon" for="rol">Ver</span>
+            <select [(ngModel)]="vista" (ngModelChange)="cambiaVista()">
+              <option value="descuentos">Descuentos</option>
+              <option value="borrados">Borrados</option>
+            </select>
+          </div>
+        </div>
+       </div>
+       <div class="modal-body"><!--Cuerpo del modal --> 
+        <div class="form-group row">
+          <div class="col-md-5"></div>
+            <div class="col-md-7">
+                  <div class="radio">
+                    <label for="radio1">
+                      <input type="radio" id="radio1" name="radios" [value]="opc1" [(ngModel)]="opcSelect" (ngModelChange)="eventBuscar()"> {{opc1}}
+                    </label>
+                  </div>
+                  <div class="radio">
+                    <label for="radio2">
+                      <input type="radio" id="radio2" name="radios" [value]="opc2" [(ngModel)]="opcSelect" (ngModelChange)="eventBuscar()"> {{opc2}}
+                    </label>
+                  </div>
+            </div>
+        </div>
+        <table class="table table-bordered table-sm table-codensed">
+          <!-------------- ESTRUCTURA DE LA TABLA PARA VER EN DESCUENTOS -------------------->
+            <thead *ngIf="verDescuentos()">
+                <th *ngIf="descProducto()">Tr</th>
+                <th>No. Factura</th>
+                <th>Fecha</th>
+                <th>Cliente</th>
+                <th>Descuento</th>
+                <th *ngIf="descProducto()">Valor U.</th>
+                <th>Total</th>
+            </thead>
+            <tbody *ngIf="descGlobal()">
+              <!-- FILA PARA LOS DESCUENTOS GLOBALES-->
+                <tr class="selector" *ngFor="let descuento of descuentos" (dblclick)="verJustificacion(justificacion, 0, descuento.consecFactura, descuento.fechaF, descuento.nombreCompleto,
+                descuento.descuento, descuento.total, 0, descuento.justificacion)" >
+                    <td>{{descuento.consecFactura}}</td>
+                    <td>{{descuento.fechaF}}</td>
+                    <td>{{descuento.nombreCompleto}}</td>
+                    <td>{{descuento.descuento | number:0}}</td>
+                    <td>{{descuento.total | number:0}}</td>                    
+                </tr>                
+            </tbody> 
+            <tbody *ngIf="descProducto()">
+              <!-- FILA PARA VER LOS DESCUENTOS DE PRODUCTOS-->
+              <tr class="selector" *ngFor="let descuento of descuentos" (dblclick)="verJustificacion(justificacion, descuento.tr, descuento.consecFactura, descuento.fechaF, descuento.nombreCompleto,
+              descuento.descuento, descuento.total, descuento.precioP, descuento.justificacion)">
+                  <td >{{descuento.tr}}</td>
+                  <td>{{descuento.consecFactura}}</td>
+                  <td>{{descuento.fechaF}}</td>
+                  <td>{{descuento.nombreCompleto}}</td>
+                  <td>{{descuento.descuento | number:0}}</td>
+                  <td>{{descuento.precioP | number: 0}}</td>
+                  <td>{{descuento.total | number:0}}</td>                    
+              </tr>
+            </tbody>
+
+            <!--------------- ESTRUCTURA DE LA TABLA PARA VER LOS BORRADOS -------------- -->
+            <thead *ngIf="!verDescuentos()">
+                <th>Tr</th>
+                <th>Fecha</th>
+                <th>Producto</th>
+                <th>Precio</th>
+                <th>Hora</th>
+                <th *ngIf="enviados()">Justificacion</th>
+            </thead>
+            <tbody *ngIf="!verDescuentos()">
+                <tr *ngFor="let borrado of borrados">
+                    <td>{{borrado.tr}}</td>
+                    <td>{{borrado.fecha}}</td>
+                    <td>{{borrado.nombreP}}</td>
+                    <td>{{borrado.precioP}}</td>
+                    <td>{{borrado.hora}}</td>
+                    <td *ngIf="enviados()">{{borrado.justificacion}}</td>
+                </tr>
+            </tbody> 
+        </table>
+
+       </div><!--Aqui termina el cuerpo -->
+       <div class="modal-footer">
+        <button type="button" class="btn btn-warning" (click)="hideModal()">Cerrar</button>
+       </div>
+     </div><!-- /.modal-content -->
+   </div><!-- /.modal-dialog -->
+   </div><!-- /.modal -->
+ 
+
+   <!-- ---------------- MODAL PARA VER LA JUSTIFICACION DE LOS DESCUENTOS---------- -->
+   <justificacion #justificacion [descGlobal]="descGlobal()" [tr]="tr" 
+   [numFactura]="numFactura" [fecha]="fechaAud" [cliente]="cliente" [descuento]="descuento"
+   [total]="total" [precioP]="precioP" [justificacion]="justif"></justificacion>

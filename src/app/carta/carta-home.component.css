@@ -1,0 +1,332 @@
+@media  (min-width: 1025px) and (max-width: 1366px) {      
+    .contenedor{
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 430px;
+    }
+    .botonCarta{
+    outline: none;
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+    margin:1px auto;
+    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    }
+
+    .hq{
+        height: 40pt;
+        font-size: 1.8vh;
+    }
+    .hq2{
+        height: 10pt;
+    }
+
+    .prueba{
+    background-color: #e4e5e6;
+    }
+
+    .botonScroll{
+    outline: none;
+    text-decoration: none;
+    background-color: #0199d9;
+    border-radius: 3px;
+    width: 100%;
+    margin-bottom: 0.5px;
+    }
+
+    .botonScroll:hover{
+    color: white;
+    }
+
+    #scrollCategoria{
+    overflow-y: scroll; 
+    overflow: hidden;
+    height: 390px;
+    }
+    #scrollSubCategoria{
+    overflow-y: scroll; 
+    overflow: hidden;
+    height: 390px;
+    }
+
+    .botonCartaP{
+    outline: none;
+    text-decoration: none;
+    background-color: white; 
+    color: black;
+    border-radius: 10px;
+    width: 100%;
+    height: 41px;
+    margin-bottom: 1px;
+    margin-top: 1px;
+    border:0px solid  red;
+    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    }
+    .botonCartaP:hover{
+    background-color: rgb(212, 23, 23); 
+    }
+
+    .botonCartaP:active{
+    background-color: rgb(212, 23, 23);
+    }
+}
+
+@media (min-width: 1367px) { 
+    .contenedor{
+        overflow-y: auto;
+        overflow-x: hidden;
+        max-height: 680px;
+    }
+    .botonCarta{
+    outline: none;
+    text-decoration: none;
+    width: 100%;
+    color: white;
+    padding: 5px;
+    border-radius: 6px;
+    margin:1px auto;
+    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    }
+
+    .hq{
+        height: 60pt;
+        font-size: 1.6vh;
+    }
+    .hq2{
+        height: 10pt;
+    }
+
+    .prueba{
+    background-color: #e4e5e6;
+    }
+
+    .botonScroll{
+    outline: none;
+    text-decoration: none;
+    background-color: #0199d9;
+    border-radius: 3px;
+    width: 100%;
+    margin-bottom: 0.5px;
+    }
+
+    .botonScroll:hover{
+    color: white;
+    }
+
+    #scrollCategoria{
+    overflow-y: scroll; 
+    overflow: hidden;
+    height: 620px;
+    }
+    #scrollSubCategoria{
+    overflow-y: scroll; 
+    overflow: hidden;
+    height: 620px;
+    }
+
+    .botonCartaP{
+    outline: none;
+    text-decoration: none;
+    background-color: white; 
+    color: black;
+    border-radius: 10px;
+    width: 100%;
+    height: 41px;
+    margin-bottom: 1px;
+    margin-top: 1px;
+    border:0px solid  red;
+    -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+    }
+    .botonCartaP:hover{
+    background-color: rgb(212, 23, 23); 
+    }
+
+    .botonCartaP:active{
+    background-color: rgb(212, 23, 23);
+    }
+
+}
+
+
+/* Portrait */
+@media only screen 
+    and (max-width: 1024px) 
+    and (orientation: portrait) {
+        .contenedor{
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: 430px;
+        }
+        .botonCarta{
+        outline: none;
+        text-decoration: none;
+        width: 100%;
+        color: white;
+        padding: 5px;
+        border-radius: 6px;
+        margin:1px auto;
+        -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        }
+    
+        .hq{
+            height: 40pt;
+            font-size: 1.3vh;
+        }
+        .hq2{
+            height: 10pt;
+        }
+    
+        .prueba{
+        background-color: #e4e5e6;
+        }
+    
+        .botonScroll{
+        outline: none;
+        text-decoration: none;
+        background-color: #0199d9;
+        border-radius: 3px;
+        width: 100%;
+        margin-bottom: 0.5px;
+        }
+    
+        .botonScroll:hover{
+        color: white;
+        }
+    
+        #scrollCategoria{
+        overflow-y: scroll; 
+        overflow: hidden;
+        height: 390px;
+        }
+        #scrollSubCategoria{
+        overflow-y: scroll; 
+        overflow: hidden;
+        height: 390px;
+        }
+    
+        .botonCartaP{
+        outline: none;
+        text-decoration: none;
+        background-color: white; 
+        color: black;
+        border-radius: 10px;
+        width: 100%;
+        height: 41px;
+        margin-bottom: 1px;
+        margin-top: 1px;
+        border:0px solid  red;
+        -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        .botonCartaP:hover{
+        background-color: rgb(212, 23, 23); 
+        }
+    
+        .botonCartaP:active{
+        background-color: rgb(212, 23, 23);
+        }
+}
+
+ 
+/* Landscape */
+@media only screen 
+    and (max-width: 1024px) 
+    and (orientation: landscape) {
+        .contenedor{
+            overflow-y: auto;
+            overflow-x: hidden;
+            max-height: 430px;
+        }
+        .botonCarta{
+        outline: none;
+        text-decoration: none;
+        width: 100%;
+        color: white;
+        padding: 5px;
+        border-radius: 6px;
+        margin:1px auto;
+        -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        }
+    
+        .hq{
+            height: 40pt;
+            font-size: 1.8vh;
+        }
+        .hq2{
+            height: 10pt;
+        }
+    
+        .prueba{
+        background-color: #e4e5e6;
+        }
+    
+        .botonScroll{
+        outline: none;
+        text-decoration: none;
+        background-color: #0199d9;
+        border-radius: 3px;
+        width: 100%;
+        margin-bottom: 0.5px;
+        }
+    
+        .botonScroll:hover{
+        color: white;
+        }
+    
+        #scrollCategoria{
+        overflow-y: scroll; 
+        overflow: hidden;
+        height: 390px;
+        }
+        #scrollSubCategoria{
+        overflow-y: scroll; 
+        overflow: hidden;
+        height: 390px;
+        }
+    
+        .botonCartaP{
+        outline: none;
+        text-decoration: none;
+        background-color: white; 
+        color: black;
+        border-radius: 10px;
+        width: 100%;
+        height: 41px;
+        margin-bottom: 1px;
+        margin-top: 1px;
+        border:0px solid  red;
+        -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        }
+        .botonCartaP:hover{
+        background-color: rgb(212, 23, 23); 
+        }
+    
+        .botonCartaP:active{
+        background-color: rgb(212, 23, 23);
+        }
+}

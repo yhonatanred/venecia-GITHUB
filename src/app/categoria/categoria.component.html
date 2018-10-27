@@ -1,0 +1,215 @@
+<div *ngIf="!categorias">
+  <h4>Por favor espere un momento, obteniendo datos...</h4>
+</div>
+
+
+<div class="container-fluid">
+  <div *ngIf="categorias">
+    <br>
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="input-group">
+          <input type="text" name="buscar" class="form-control" placeholder="buscar..." [(ngModel)]="buscar" (keyup)="eventoBuscarCateg()">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-primary" (click)="eventoBuscarCateg()">
+              <i class="fa fa-search"></i> Buscar</button>
+          </span>
+        </div>
+      </div>
+
+      <div class="col-sm-4">
+      </div>
+
+      <div class="col-sm-4">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <i class="fa fa-file-text fa-lg"></i>
+          </span>
+          <input type="text" id="input3-group1" name="nCategoria" [(ngModel)]="nombre" class="form-control" placeholder="nueva categoria"
+            (keypress)="eventoCrear($event)">
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-success" (click)="guardarCateg()">
+              <i class="fa fa-plus-square fa-lg"></i> Crear</button>
+          </span>
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <!--tabla para mostrar las categorias -->
+
+    <!--<div class="col-lg-6"> -->
+    <div class="card">
+      <div class="card-header">
+        <h3>
+          <i class="fa fa-align-justify"></i> Categorias</h3>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Nombre</th>
+              <th> </th>
+              <th> </th>
+              <th>Subcategorias</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let categoria of categorias; let i = index">
+              <td>{{consecutivo(i+1)}}</td>
+              <td>
+                {{categoria.nombre}}
+              </td>
+              <td>
+                <button type="button" class="btn btn-warning" data-toggle="modal" (click)="muestraVarEnModal(i);categModal.show()">
+                  <span>
+                    <i class="fa fa-pencil fa-lg"></i>
+                  </span> Modificar
+
+                </button>
+              </td>
+              <td>
+                <button type="button" class="btn btn-danger" data-toggle="modal" (click)="modalEliminarCategoria(i, eliminarModal)">
+                  <span>
+                    <i class="fa fa-trash-o fa-lg"></i>
+                  </span> Eliminar
+                </button>
+              </td>
+              <td>
+                <!-- <a  routerLinkActive="active" [routerLink]="['/subcategorias']">Categorias</a> -->
+
+                <button type="button" class="btn btn-primary" routerLinkActive="active" [routerLink]="['/subcategorias', categoria.id]">
+                  <span>
+                    <i class="icon-eye icons font-2xl"></i>
+                  </span>Ver
+                </button>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+        <ul class="pagination">
+          <li class="page-item">
+            <button type="button" class="btn btn-primary" (click)="anteriorRango()" *ngIf="primer == 0" disabled>
+              <i class="fa fa-chevron-left fa-lg"></i> Atras</button>
+            <button type="button" class="btn btn-primary" (click)="anteriorRango()" *ngIf="primer > 0">
+              <i class="fa fa-chevron-left fa-lg"></i> Atras</button>
+            <!-- <input type="button" value="Previo" (click)="anteriorRango()"> -->
+          </li>
+          <li>&nbsp;</li>
+          <button type="button" class="btn btn-primary" (click)="siguienteRango()" *ngIf="ultimo < tamanioResult">Siguiente
+            <i class="fa fa-chevron-right fa-lg"></i>
+          </button>
+          <button type="button" class="btn btn-primary" (click)="siguienteRango()" *ngIf="ultimo >= tamanioResult" disabled>Siguiente
+            <i class="fa fa-chevron-right fa-lg"></i>
+          </button>
+          <!-- <input type="button" value="Previo" (click)="siguienteRango()"> -->
+        </ul>
+      </div>
+    </div>
+    <!-- </div> -->
+
+
+
+    <!--VENTANA MODAL  PARA MODIFICAR CATEGORIAS-->
+    <div bsModal #categModal="bs-modal" class="modal fade" id="modalCateg" tabindex="-1" role="dialog" aria-labelledby="categModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-warning" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Renombrar categoria</h4>
+            <button type="button" class="close" (click)="categModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="modifica-categ" class="form-control-label">Nuevo nombre:</label>
+                <input type="text" class="form-control" id="modifica-categ" [(ngModel)]="nuevNombre" name="nombreCateg" (keypress)="eventoRenombrar($event, categModal)">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="categModal.hide(); limpiarModal()">Cerrar</button>
+            <button type="button" class="btn btn-warning" (click)="renombrarCategoria(categModal)">Guardar cambios</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+
+    <!-- VENTANA MODAL PARA ELIMINAR-->
+    <div bsModal #eliminarModal="bs-modal" class="modal fade" id="modalCateg" tabindex="-1" role="dialog" aria-labelledby="categModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-danger" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h4 class="modal-title">Eliminar {{nombre}}</h4>
+            <button type="button" class="close" (click)="eliminarModal.hide()" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+
+            <h5>Si esta categoria contiene PRODUCTOS tambien se eliminarán.<br> ¿Está seguro de eliminar esta categoria?</h5>
+            <!--Aqui comienza el dropdown-->
+
+            <div class="input-group-btn row" dropdown *ngIf="opcion.opc1=='No'">
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+              <div class="col-sm-4">
+                <button type="button" class="btn btn-warning dropdown-toggle" dropdownToggle>{{opcion.opc1}}
+                  <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" *dropdownMenu>
+                  <a class="dropdown-item" href="#/categorias" (click)="cambiarOpcion()">{{opcion.opc2}}</a>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+            </div>
+            <!--Aqui termina el dropdown-->
+
+            <!--Aqui comienza el dropdown para mostrar el boton en rojo-->
+            <div class="input-group-btn row" dropdown *ngIf="opcion.opc1=='Si'">
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+              <div class="col-sm-4">
+                <button type="button" class="btn btn-danger dropdown-toggle" dropdownToggle>{{opcion.opc1}}
+                  <span class="caret"></span>
+                </button>
+                <div class="dropdown-menu" *dropdownMenu>
+                  <a class="dropdown-item" href="#/categorias" (click)="cambiarOpcion()">{{opcion.opc2}}</a>
+                </div>
+              </div>
+              <div class="col-sm-4">
+                ;&nbsp
+              </div>
+            </div>
+            <!--Aqui termina el dropdown-->
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" (click)="cerrarModalEliminar(eliminarModal)">Cerrar</button>
+            <button type="button" class="btn btn-danger" (click)="eliminarCategoria(eliminarModal)">Eliminar</button>
+          </div>
+        </div>
+        <!-- /.modal-content -->
+      </div>
+      <!-- /.modal-dialog -->
+    </div>
+    <!-- /.modal -->
+
+  </div>
+
+</div>
